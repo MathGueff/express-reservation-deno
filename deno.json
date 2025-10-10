@@ -1,0 +1,68 @@
+{
+  "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "tasks": {
+    "dev": "deno run --watch -A server.ts",
+    "test": "deno test -A",
+    "scripts": "deno run -A scripts.ts"
+  },
+  "imports": {
+    "@std/crypto": "jsr:@std/crypto@^1.0.3",
+    "@zarco/isness": "jsr:@zarco/isness@^0.1.18",
+    "express": "npm:express@^4.18.2",
+    "node-poppler": "npm:node-poppler@^8.0.4",
+    "swagger-jsdoc": "npm:swagger-jsdoc@^6.2.8",
+    "swagger-ui-express": "npm:swagger-ui-express@^5.0.0",
+    "cors": "npm:cors@^2.8.5",
+    "morgan": "npm:morgan@^1.10.0",
+    "helmet": "npm:helmet@^7.0.0",
+    "responser": "npm:responser@^2.0.2",
+    "i18next-http-middleware": "npm:i18next-http-middleware@^3.5.0",
+    "node:path": "node:path",
+    "jsr:@std/io": "jsr:@std/io@0.224.0",
+    "@google/generative-ai": "npm:@google/generative-ai",
+    "@google/generative-ai/server": "npm:@google/generative-ai/server",
+    "he": "npm:he",
+    "mongoose": "npm:mongoose@8.16.1",
+    "mongoose-sequence": "npm:mongoose-sequence@6.0.1"
+  },
+  "compilerOptions": {
+    "strict": true,
+    "lib": [
+      "deno.ns",
+      "deno.window"
+    ]
+  },
+  "lint": {
+    "rules": {
+      "tags": [
+        "recommended"
+      ],
+      "include": [
+        "require-await",
+        "ban-untagged-console",
+        "no-multi-spaces",
+        "no-extra-semi"
+      ],
+      "exclude": [
+        "no-namespace",
+        "no-debugger",
+        "no-explicit-any"
+      ]
+    }
+  },
+  "fmt": {
+    "include": [
+      "**/*.ts",
+      "**/*.js",
+      "**/*.json",
+      "**/*.md"
+    ],
+    "options": {
+      "useTabs": false,
+      "lineWidth": 150,
+      "indentWidth": 2,
+      "singleQuote": true,
+      "semiColons": false
+    }
+  }
+}
