@@ -7,7 +7,7 @@ import { Env } from '../config/Env.ts'
 export abstract class AbstractEnvironment {
   public port: number
   public ip: string = ''
-
+  
   constructor(port: number) {
     this.port = port
     if (Env.ip) this.ip = Env.ip
@@ -28,6 +28,10 @@ export abstract class AbstractEnvironment {
   }
 
   protected listen(server: Express): void {
-    server.listen(this.port, this.ip)
+    server.listen(this.port, this.ip, this.listening)
+  }
+
+  protected listening(){
+    console.log('Servidor iniciado!')
   }
 }

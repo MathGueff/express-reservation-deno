@@ -1,4 +1,3 @@
-import { load } from 'https://deno.land/std@0.201.0/dotenv/mod.ts'
 import is from '@zarco/isness'
 type ConstEnum<T, V = string> = Extract<T[keyof T], V>
 export type EnvironmentName = ConstEnum<typeof EnvironmentName>
@@ -26,32 +25,9 @@ export enum EnvironmentNameEnum {
   hooks = 'hooks',
 }
 
-if (name && EnvironmentName[name as EnvironmentName] === undefined) {
-  name = EnvironmentNameEnum.dev
-}
-if (Deno.env.get('ENV') === undefined) {
-  await load({
-    envPath: `.env.${name}`,
-    examplePath: '.env.example',
-    defaultsPath: '.env.defaults',
-    allowEmptyValues: false,
-    export: true,
-  })
-}
-
-if (
-  Object.values(EnvironmentName).includes(name as EnvironmentName) === false
-) {
-  throw new Error(`Invalid EnvironmentName: ${name}`)
-}
-
 export class Env {
   static get name() {
     return name
-  }
-
-  static get owner() {
-    return Deno.env.get('OWNER') ?? ''
   }
 
   static get ip() {

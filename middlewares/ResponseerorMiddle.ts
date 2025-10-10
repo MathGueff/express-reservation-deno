@@ -1,10 +1,7 @@
 // deno-lint-ignore-file
-import { Print } from '../utilities/static/Print.ts'
 import { NextFunction, Request, Response } from 'npm:express'
 import HttpStatus from 'npm:http-status-codes'
 import fnCode from 'npm:fn-code'
-
-const print = new Print()
 
 const camelCase = (str: string) => str.toLowerCase().replace(/(\_\w)/g, (c) => c[1].toUpperCase())
 
@@ -300,7 +297,7 @@ export class Responserror {
         this.options.promptErrors())
     ) {
       // Handle ALL errors
-      print.error('Error', error)
+      console.error('Error', error)
     }
 
     this.posFunctions.forEach((fn) => fn.apply(null))

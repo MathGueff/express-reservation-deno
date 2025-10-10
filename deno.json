@@ -1,14 +1,17 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
   "tasks": {
-    "dev": "deno run --watch -A server.ts",
+    "dev": "deno run --watch -A --env server.ts",
     "test": "deno test -A",
     "scripts": "deno run -A scripts.ts"
   },
   "imports": {
     "@std/crypto": "jsr:@std/crypto@^1.0.3",
     "@zarco/isness": "jsr:@zarco/isness@^0.1.18",
+    "bcrypt": "npm:bcrypt@^6.0.0",
     "express": "npm:express@^4.18.2",
+    "jsonwebtoken": "npm:jsonwebtoken@^9.0.2",
+    "jwt-decode": "npm:jwt-decode@^4.0.0",
     "node-poppler": "npm:node-poppler@^8.0.4",
     "swagger-jsdoc": "npm:swagger-jsdoc@^6.2.8",
     "swagger-ui-express": "npm:swagger-ui-express@^5.0.0",
