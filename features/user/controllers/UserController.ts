@@ -7,6 +7,7 @@ import { Print } from '../../../utilities/static/Print.ts'
 import { ObjectId } from '../../../globals/Mongo.ts'
 import { UserRules } from '../UserRules.ts'
 import { User } from '../../../models/User/User.ts'
+import { QueryOptions } from 'mongoose'
 
 export class UserController {
   private userRepository: UserRepository;
@@ -124,6 +125,39 @@ export class UserController {
         throw throwlhos.err_notFound(
           "Usuário não encontrado",
           { id, ...req.body },
+        )
+      }
+
+      //TODO: Atualizar para utilizar send_ok
+      return res.status(200).json({
+        data: founded,
+      })
+
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  findAll = async (req : Request, res : Response, next : NextFunction) => {
+    try {
+      const print = new Print()
+
+      print.info(
+        'Buscando todos usuários'
+      )
+      let options : QueryOptions = {};
+
+      if(req.pagination){
+        const limit = req.pagination.limit;
+        const skip = req.pagination.page * limit - limit;
+        options = {limit, skip}
+      }
+
+      const founded = await this.userRepository.findUsersWithPagination(options)
+
+      if (founded.length === 0) {
+        throw throwlhos.err_notFound(
+          "Nenhum usuário encontrado"
         )
       }
 
