@@ -24,5 +24,10 @@ export class UserRules extends BaseRules{
             validator: is.string,
             message: 'Valor para senha inválido!',
         })
+
+        this.rc.addRule('balance', {
+            validator: is.number,
+            message: 'Valor para balance inválido!',
+        })
     }
 }

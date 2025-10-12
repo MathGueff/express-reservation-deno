@@ -3,7 +3,6 @@ import { UserRepository } from '../../../models/User/UserRepository.ts'
 import { ICheckObj } from '../../../base/BaseRules.ts'
 import { throwlhos } from '../../../globals/Throwlhos.ts'
 import { IUser } from '../../../models/User/IUser.ts'
-import { Print } from '../../../utilities/static/Print.ts'
 import { ObjectId } from '../../../globals/Mongo.ts'
 import { UserRules } from '../UserRules.ts'
 import { User } from '../../../models/User/User.ts'
@@ -24,12 +23,12 @@ export class UserController {
 
   register = async (req :Request, res : Response, next : NextFunction) => {
     try {
-      const newUser : IUser = req.body as IUser;
+      const newUser = new User({...req.body} as IUser)
       
       this.rules.validate(
-        {name : newUser.name},
-        {email : newUser.email},
-        {password : newUser.password}
+        ...Object.entries(newUser)
+          .filter(([, value]) => value !== undefined)
+          .map(([key, value]) => ({ [key]: value }))
       )
 
       const created = await this.userRepository.createOne(newUser)
@@ -47,30 +46,30 @@ export class UserController {
     try {
       const id = req.params.id as string
       const update = new User({...req.body} as IUser)
+      update.balance = Number(update.balance)
 
-      if(!update.name && !update.email && !update.password){
+      const toValidate : ICheckObj[] = [
+        ...Object.entries(update)
+          .filter(([, value]) => value !== undefined)
+          .map(([key, value]) => ({ [key]: value }))
+      ]
+      
+      if(toValidate.length === 0){
         throw throwlhos.err_badRequest('Informe um campo para ser atualizado');
       }
 
-      const toValidate : ICheckObj[] = [{id}]
+      toValidate.push({id})
 
-      if(update.name){
-        toValidate.push({name : update.name})
-      }
-
-      if(update.email){
-        toValidate.push({email : update.email})
-      }
-      
       this.rules.validate(...toValidate)
       
       if(update.password){
         await update.hashPassword()
       }
-
-      const updated = await this.userRepository.updateOne({
-        _id: ObjectId(id),
-      }, { $set: update })
+      
+      const updated = await this.userRepository.updateOne(
+        {_id: ObjectId(id)}, 
+        { $set: update }
+      )
 
       if (!updated) {
         throw throwlhos.err_notFound(
