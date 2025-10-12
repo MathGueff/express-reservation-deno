@@ -8,7 +8,6 @@ export class Jwt{
     }
     
     static verifyTokenAndDecode(token: string) {
-        // const secretKey = env.jwt.secret;
        jwt.verify(token, Env.jwtSecret);
        return jwt.decode(token)
     }

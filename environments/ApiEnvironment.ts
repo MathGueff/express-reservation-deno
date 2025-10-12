@@ -1,13 +1,14 @@
 import { Env } from '../config/Env.ts'
-import { UserRouter } from '../features/auth/User/UserRouter.ts'
+import { AuthRouter } from '../features/auth/AuthRouter.ts'
 import { Responserror } from '../middlewares/ResponseerorMiddle.ts'
 import { APIRouter } from '../routes/APIRouter.ts'
+import { UserRouter } from '../routes/UserRouter.ts'
 import { AbstractEnvironment } from './AbstractEnvironment.ts'
 import express from 'npm:express'
 
 export class ApiEnvironment extends AbstractEnvironment {
   constructor() {
-    const port = Env.isRunningLocally ? 7001 : 8000
+    const port = Env.port;
     super(port)
   }
 
@@ -17,6 +18,7 @@ export class ApiEnvironment extends AbstractEnvironment {
     this.initializeDefaultMiddlewares(apiServer)
 
     apiServer.use(APIRouter)
+    apiServer.use(AuthRouter)
     apiServer.use(UserRouter)
 
     const r = new Responserror

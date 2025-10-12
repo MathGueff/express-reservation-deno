@@ -13,6 +13,15 @@ export class User implements IUser {
     this.email = user.email
     this.password = user.password
   }
+
+  async hashPassword(){
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+  }
+
+  async comparePassword(passwordToCompare : string){
+    return await bcrypt.compare(passwordToCompare, this.password)
+  }
 }
 
 class UserSchemaClass extends BaseSchema {

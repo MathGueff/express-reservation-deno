@@ -1,7 +1,6 @@
 import mongoose from 'mongoose'
-import is from '@zarco/isness'
 import { Print } from '../utilities/static/Print.ts'
-import { Env, env, EnvTypes } from '../config/Env.ts'
+import { Env } from '../config/Env.ts'
 
 const print = new Print()
 
@@ -56,11 +55,7 @@ export class Database {
       // filtra propriedades que não estão no schema
       mongoose.set('strictQuery', false)
 
-      const options: mongoose.ConnectOptions = {
-        maxPoolSize: this.getMaxPoolSize(), // Adjust pool size as needed
-      }
-
-      const connection = mongoose.createConnection(this.connectionString, options)
+      const connection = mongoose.createConnection(this.connectionString)
 
       connection.on('connected', () => {
         print.success(
@@ -73,21 +68,5 @@ export class Database {
       print.error(`Error connecting to database: ${error}`)
       throw error
     }
-  }
-
-  private getMaxPoolSize = (): number => {
-    if (Env.mongodbMaxPoolSize) return Env.mongodbMaxPoolSize
-
-    const defaultMaxPoolSize = env({
-      [EnvTypes.developmentLike]: 10,
-      [EnvTypes.productionLike]: 100,
-    })
-
-    if (!is.number(defaultMaxPoolSize as any)) {
-      new Print().info(`Invalid default maxPoolSize value: ${defaultMaxPoolSize}, using 10`)
-      return 10
-    }
-
-    return Number(defaultMaxPoolSize)
   }
 }

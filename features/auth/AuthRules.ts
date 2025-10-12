@@ -1,7 +1,7 @@
 import is from '@zarco/isness'
-import { BaseRules } from '../../../base/BaseRules.ts'
+import { BaseRules } from '../../base/BaseRules.ts'
 
-export class UserRules extends BaseRules {
+export class AuthRules extends BaseRules {
   constructor() {
     super()
 
@@ -9,12 +9,7 @@ export class UserRules extends BaseRules {
       validator: is.string,
       message: 'O id deve ser válido'
     })
-
-    this.rc.addRule('name', {
-      validator: is.string,
-      message: 'Valor para nome inválido!',
-    })
-
+    
     this.rc.addRule('email', {
       validator: is.string,
       message: 'Valor para email inválido!',
