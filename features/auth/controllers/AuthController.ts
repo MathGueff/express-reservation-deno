@@ -21,29 +21,12 @@ export class AuthController {
 
   me = (req :Request, res : Response, next : NextFunction) => {
     try {
-      return res.status(200).json({
-        data: req.user,
-      })
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  create = async (req :Request, res : Response, next : NextFunction) => {
-    try {
-      const newUser : IUser = req.body as IUser;
-      
-      this.rules.validate(
-        {name : newUser.name},
-        {email : newUser.email},
-        {password : newUser.password}
-      )
-
-      const created = await this.authRepository.createOne(newUser)
-
-      //TODO: Atualizar para utilizar send_ok
-      return res.status(200).json({
-        data: created,
+      const user = req.user;
+      if(!user){
+        throw throwlhos.err_unauthorized('É necessário um token válido')
+      }
+      return res.send_ok('auth.success.get-authenticated', {
+        data: user
       })
     } catch (error) {
       next(error)
@@ -69,9 +52,8 @@ export class AuthController {
       }
       
       const token = Jwt.signToken(founded.id)
-      //TODO: Atualizar para utilizar send_ok
-      return res.status(200).json({
-        token,
+      return res.send_ok('auth.success.login', {
+        token
       })
     } catch (error) {
       next(error)

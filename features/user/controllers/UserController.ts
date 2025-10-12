@@ -33,9 +33,8 @@ export class UserController {
 
       const created = await this.userRepository.createOne(newUser)
 
-      //TODO: Atualizar para utilizar send_ok
-      return res.status(200).json({
-        data: created,
+      return res.send_ok('users.success.register', {
+        data: req.body,
       })
     } catch (error) {
       next(error)
@@ -77,9 +76,8 @@ export class UserController {
           { id, ...req.body },
         )
       }
-      
-      //TODO: Atualizar para utilizar send_ok
-      return res.status(200).json({
+
+      return res.send_ok('users.success.update', {
         data: req.body,
       })
     } catch (error) {
@@ -95,20 +93,19 @@ export class UserController {
         { id }
       )
 
-      const founded = await this.userRepository.findOne({
+      const found = await this.userRepository.findOne({
         _id: ObjectId(id),
       })
 
-      if (!founded) {
+      if (!found) {
         throw throwlhos.err_notFound(
           "Usuário não encontrado",
           { id, ...req.body },
         )
       }
 
-      //TODO: Atualizar para utilizar send_ok
-      return res.status(200).json({
-        data: founded,
+      return res.send_ok('users.success.findById', {
+        data : found
       })
 
     } catch (error) {
@@ -127,19 +124,17 @@ export class UserController {
         options = {limit, skip}
       }
 
-      const founded = await this.userRepository.findUsersWithPagination(options)
+      const found = await this.userRepository.findUsersWithPagination(options)
 
-      if (founded.length === 0) {
+      if (found.length === 0) {
         throw throwlhos.err_notFound(
           "Nenhum usuário encontrado"
         )
       }
 
-      //TODO: Atualizar para utilizar send_ok
-      return res.status(200).json({
-        data: founded,
+      return res.send_ok('users.success.findAll', {
+        data : found
       })
-
     } catch (error) {
       next(error);
     }
@@ -164,8 +159,7 @@ export class UserController {
         )
       }
 
-      //TODO: Atualizar para utilizar send_ok
-      return res.status(200).json({
+      return res.send_ok('users.success.register', {
         data: excluded,
       })
     } catch (error) {
