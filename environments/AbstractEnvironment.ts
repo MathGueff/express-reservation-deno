@@ -2,7 +2,7 @@ import express, { Express } from 'npm:express'
 import cors from 'npm:cors'
 import helmet from 'npm:helmet'
 import responser from 'responser'
-import { Env } from '../config/Env.ts'
+import { printMiddle } from '../middlewares/PrintMiddle.ts'
 
 export abstract class AbstractEnvironment {
   public port: number
@@ -23,6 +23,8 @@ export abstract class AbstractEnvironment {
     server.use(express.urlencoded({ extended: true }))
 
     server.use(express.static('public'))
+
+    server.use(printMiddle);
   }
 
   protected listen(server: Express): void {

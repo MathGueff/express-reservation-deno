@@ -31,12 +31,6 @@ export class UserController {
         {email : newUser.email},
         {password : newUser.password}
       )
-      
-      const print = new Print()
-
-      print.info(
-        'Cadastrando usuário'
-      )
 
       const created = await this.userRepository.createOne(newUser)
 
@@ -74,13 +68,6 @@ export class UserController {
         await update.hashPassword()
       }
 
-      const print = new Print()
-
-      print.info(
-        'Atualizando usuário',
-        { id },
-      )
-
       const updated = await this.userRepository.updateOne({
         _id: ObjectId(id),
       }, { $set: update })
@@ -109,14 +96,6 @@ export class UserController {
         { id }
       )
 
-      const print = new Print()
-
-      print.info(
-        'Pesquisando por usuário',
-        { id },
-      )
-      
-
       const founded = await this.userRepository.findOne({
         _id: ObjectId(id),
       })
@@ -140,11 +119,7 @@ export class UserController {
 
   findAll = async (req : Request, res : Response, next : NextFunction) => {
     try {
-      const print = new Print()
 
-      print.info(
-        'Buscando todos usuários'
-      )
       let options : QueryOptions = {};
 
       if(req.pagination){
@@ -177,13 +152,6 @@ export class UserController {
       
       this.rules.validate(
         { id }
-      )
-
-      const print = new Print()
-
-      print.info(
-        'Removendo usuário',
-        { id },
       )
 
       const excluded = await this.userRepository.deleteOne({

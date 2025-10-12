@@ -38,12 +38,6 @@ export class AuthController {
         {email : newUser.email},
         {password : newUser.password}
       )
-      
-      const print = new Print()
-
-      print.info(
-        'Cadastrando usuário'
-      )
 
       const created = await this.authRepository.createOne(newUser)
 
