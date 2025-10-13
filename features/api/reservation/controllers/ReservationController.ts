@@ -38,7 +38,7 @@ export class ReservationController{
             const reservations = await this.reservationRepository.findReservationWithPagination(options)
 
             if(reservations.length === 0){
-                throw throwlhos.err_notFound('Nenhuma reserva encontrada')
+                throw throwlhos.err_notFound('Nenhuma reserva encontrada', {reservations})
             }
 
             res.send_ok('reservation.success.getAll', {
@@ -53,10 +53,12 @@ export class ReservationController{
         try {
             const id = req.params.id as string
 
+            this.rules.validate({id})
+
             const reservation = await this.reservationRepository.findById(id)
 
             if(!reservation){
-                throw throwlhos.err_notFound('Nenhuma reserva encontrada')
+                throw throwlhos.err_notFound('Nenhuma reserva encontrada', {reservation})
             }
 
             res.send_ok('reservation.success.findById', {
@@ -73,7 +75,7 @@ export class ReservationController{
             const reservations = await this.reservationRepository.findMany({buyer : ObjectId(id)})
 
             if(reservations.length === 0){
-                throw throwlhos.err_notFound('Nenhuma reserva encontrada')
+                throw throwlhos.err_notFound('Nenhuma reserva encontrada',{reservations})
             }
 
             res.send_ok('reservation.success.findMyReservations', {
@@ -115,21 +117,24 @@ export class ReservationController{
             const buyerObjectId = ObjectId(buyerId);
 
             if(!buyerId)
-                throw throwlhos.err_badRequest('Não foi possível fazer sua reserva, informe seu login para reservar')
+                throw throwlhos.err_badRequest('Não foi possível fazer sua reserva, informe seu login para reservar',{id})
 
             this.rules.validate({id}, ...this.apiBodyEntriesMapper.exec({buyer : buyerObjectId}))
 
             const reservation = await this.reservationRepository.findById(id)
     
             if(!reservation) {
-                throw throwlhos.err_notFound('Reserva não encontrada')
+                throw throwlhos.err_notFound('Reserva não encontrada', {reservation})
             }
     
             if(reservation.buyer)
-                throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso')
+                throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso',{buyer : reservation.buyer})
     
             if(reservation.isOwnerBuying(buyerId)){
-                throw throwlhos.err_badRequest('Você não pode reservar a sua própria reserva criada')
+                throw throwlhos.err_badRequest('Você não pode reservar a sua própria reserva criada', {
+                    buyer : buyerId,
+                    owner : reservation.owner
+                })
             }
             
             const reserveService = new ReserveService()
@@ -163,7 +168,7 @@ export class ReservationController{
             const deleted = await this.reservationRepository.deleteById(id)
 
             if(!deleted)
-                throw throwlhos.err_notFound('Reserva não encontrada')
+                throw throwlhos.err_notFound('Reserva não encontrada', {deleted})
 
             res.send_ok('reservation.success.remove', {
                 reservation : deleted

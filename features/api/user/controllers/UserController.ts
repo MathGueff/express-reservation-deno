@@ -57,7 +57,7 @@ export class UserController {
       ]
       
       if(toValidate.length === 0){
-        throw throwlhos.err_badRequest('Informe um campo para ser atualizado');
+        throw throwlhos.err_badRequest('Informe um campo para ser atualizado', {update});
       }
 
       toValidate.push({id})
@@ -131,7 +131,8 @@ export class UserController {
 
       if (found.length === 0) {
         throw throwlhos.err_notFound(
-          "Nenhum usuário encontrado"
+          "Nenhum usuário encontrado",
+          {found}
         )
       }
 

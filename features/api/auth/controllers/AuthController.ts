@@ -21,7 +21,7 @@ export class AuthController {
     try {
       const user = req.user;
       if(!user){
-        throw throwlhos.err_unauthorized('É necessário um token válido')
+        throw throwlhos.err_unauthorized('É necessário um token válido', {user})
       }
       return res.send_ok('auth.success.get-authenticated', {
         data: user
@@ -40,13 +40,13 @@ export class AuthController {
       const founded = await this.authRepository.findOne({email})
 
       if(!founded) {
-        throw throwlhos.err_notFound('Nenhum usuário encontrado')
+        throw throwlhos.err_notFound('Nenhum usuário encontrado', {founded})
       }
 
       const checked = await founded.comparePassword(password)
 
       if(!checked){
-        throw throwlhos.err_unauthorized('Email ou senha estão incorretos')
+        throw throwlhos.err_unauthorized('Email ou senha estão incorretos', {email, password})
       }
       
       const token = Jwt.signToken(founded.id)
