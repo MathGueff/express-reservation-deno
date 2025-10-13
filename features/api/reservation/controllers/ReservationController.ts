@@ -49,7 +49,7 @@ export class ReservationController{
 
     create = async (req: Request, res : Response, next : NextFunction) => {
         try {
-            const {name, price} = req.body;
+            const {name, price, daysOfDuration} = req.body;
             const ownerId = req.user.id as string
 
             this.rules.validate(...this.apiBodyEntriesMapper.exec({owner : ObjectId(ownerId), ...req.body}))
@@ -57,7 +57,8 @@ export class ReservationController{
             const newReservation = new Reservation({
                 name,
                 owner : ObjectId(ownerId), 
-                price : Number(price)
+                price : Number(price),
+                daysOfDuration
             })
 
             const created = await this.reservationRepository.create(newReservation)
@@ -87,8 +88,8 @@ export class ReservationController{
                 throw throwlhos.err_notFound('Reserva não encontrada')
             }
 
-            if(reservation.buyer)
-                throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso')
+            // if(reservation.buyer)
+            //     throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso')
 
             if(reservation.isOwnerBuying(buyerId)){
                 throw throwlhos.err_badRequest('Você não pode reservar a sua própria reserva criada')

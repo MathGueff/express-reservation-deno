@@ -8,17 +8,32 @@ export class Reservation implements IReservation{
   owner : IReservation['owner']
   buyer ?: IReservation['buyer']
   price : IReservation['price']
+  daysOfDuration : IReservation['daysOfDuration']
+  startedDate ?: IReservation['startedDate']
+  endDate ?: IReservation['endDate']
 
   constructor(reservation : IReservation){
     this.name = reservation.name
     this.buyer = reservation.buyer,
     this.price = reservation.price,
     this.owner = reservation.owner
+    this.daysOfDuration = reservation.daysOfDuration
+    this.startedDate = reservation.startedDate
+    this.endDate = reservation.endDate
   }
 
   isOwnerBuying(buyer : string): boolean {
     return this.owner.toString() == buyer
   }
+
+  // isReservationExpired(): boolean {
+  //   if(!this.startedDate) { 
+  //     return false
+  //   }
+  //   const interval = (new Date().getTime() - this.startedDate.getTime())
+  //   console.log(interval)
+  //   return !!(true)
+  // }
 }
 
 export class ReservationSchemaClass extends BaseSchema{
@@ -26,7 +41,8 @@ export class ReservationSchemaClass extends BaseSchema{
     super({
         name : {
           type : string,
-          required: true
+          required: true,
+          unique: true
         },
         owner : {
             type : ObjectId,
@@ -40,12 +56,38 @@ export class ReservationSchemaClass extends BaseSchema{
         price : {
           type : Number,
           required : true
+        },
+        daysOfDuration : {
+          type : Number,
+          required : true
+        },
+        startedDate : {
+          type : Date,
+          required : false,
+          default : null
+        },
+        endDate : {
+          type : Date,
+          required: false,
+          default: null
         }
     })
   }
 }
 
 const ReservationSchema = new ReservationSchemaClass().schema
+
+ReservationSchema.pre('findOneAndUpdate', async function(next){
+  const toUpdate = await this.model.findOne(this.getQuery())
+  if(toUpdate.startedDate || toUpdate.endDate) {
+    next();
+    return
+  }
+  toUpdate.startedDate = new Date();
+  toUpdate.endDate = new Date().setDate(new Date().getDate() + toUpdate.daysOfDuration)
+  toUpdate.save()
+  next()
+})
 
 ReservationSchema.loadClass(Reservation) 
 

@@ -5,5 +5,7 @@ export interface IReservation{
     owner : Types.ObjectId
     buyer ?: Types.ObjectId
     price : number,
-    
+    daysOfDuration : number
+    startedDate ?: Date
+    endDate ?: Date
 }

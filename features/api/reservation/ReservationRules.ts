@@ -30,5 +30,10 @@ export class ReservationRules extends BaseRules{
             validator: is.number,
             message: 'Valor para senha inválido!',
         })
+
+        this.rc.addRule('daysOfDuration', {
+            validator: is.number,
+            message: 'Valor dias de duração inválido!',
+        })
     }
 }
