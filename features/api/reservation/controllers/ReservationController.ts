@@ -88,8 +88,8 @@ export class ReservationController{
                 throw throwlhos.err_notFound('Reserva não encontrada')
             }
 
-            // if(reservation.buyer)
-            //     throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso')
+            if(reservation.buyer)
+                throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso')
 
             if(reservation.isOwnerBuying(buyerId)){
                 throw throwlhos.err_badRequest('Você não pode reservar a sua própria reserva criada')
