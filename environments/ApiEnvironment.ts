@@ -3,6 +3,7 @@ import { Responserror } from '../middlewares/ResponseerorMiddle.ts'
 import { APIRouter } from '../routes/APIRouter.ts'
 import { AuthRouter } from '../routes/AuthRouter.ts'
 import { DocsRouter } from '../routes/DocsRouter.ts'
+import { ReservationRouter } from '../routes/ReservationRouter.ts'
 import { UserRouter } from '../routes/UserRouter.ts'
 import { AbstractEnvironment } from './AbstractEnvironment.ts'
 import express from 'npm:express'
@@ -22,6 +23,7 @@ export class ApiEnvironment extends AbstractEnvironment {
     apiServer.use(APIRouter)
     apiServer.use(AuthRouter)
     apiServer.use(UserRouter)
+    apiServer.use(ReservationRouter)
 
     const r = new Responserror
     apiServer.use(r.errorHandler)

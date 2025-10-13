@@ -7,6 +7,7 @@ import { ObjectId } from '../../../../globals/Mongo.ts'
 import { UserRules } from '../UserRules.ts'
 import { User } from '../../../../models/User/User.ts'
 import { QueryOptions } from 'mongoose'
+import { ApiBodyEntriesMapper } from '../../../../services/ApiBodyEntriesMapper.ts'
 
 export class UserController {
   private userRepository: UserRepository;
@@ -25,13 +26,13 @@ export class UserController {
     try {
       const newUser = new User({...req.body} as IUser)
       
+      const apiBodyEntriesMapper = new ApiBodyEntriesMapper<User>()
+
       this.rules.validate(
-        ...Object.entries(newUser)
-          .filter(([, value]) => value !== undefined)
-          .map(([key, value]) => ({ [key]: value }))
+        ...apiBodyEntriesMapper.exec(newUser)
       )
 
-      const created = await this.userRepository.createOne(newUser)
+      await this.userRepository.createOne(newUser)
 
       return res.send_ok('user.success.register', {
         data: req.body,
@@ -45,12 +46,14 @@ export class UserController {
     try {
       const id = req.params.id as string
       const update = new User({...req.body} as IUser)
-      update.balance = Number(update.balance)
+
+      if(update.balance)
+        update.balance = Number(update.balance)
+
+      const apiBodyEntriesMapper = new ApiBodyEntriesMapper<User>();
 
       const toValidate : ICheckObj[] = [
-        ...Object.entries(update)
-          .filter(([, value]) => value !== undefined)
-          .map(([key, value]) => ({ [key]: value }))
+        ...apiBodyEntriesMapper.exec(update)
       ]
       
       if(toValidate.length === 0){
