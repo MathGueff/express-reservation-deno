@@ -4,15 +4,6 @@ import { AuthRouter as Routes} from '../features/auth/AuthRouter.ts'
 
 const AuthRouter = Router()
 
-/**
- * @openapi
- * /:
- *   get:
- *     description: Welcome to swagger-jsdoc!
- *     responses:
- *       200:
- *         description: Returns OK.
- */
 AuthRouter.use(Routes)
 
 export { AuthRouter }

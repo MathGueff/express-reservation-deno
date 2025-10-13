@@ -1,8 +1,8 @@
 import { Env } from '../config/Env.ts'
-import { AuthRouter } from '../features/auth/AuthRouter.ts'
-import { printMiddle } from '../middlewares/PrintMiddle.ts'
 import { Responserror } from '../middlewares/ResponseerorMiddle.ts'
 import { APIRouter } from '../routes/APIRouter.ts'
+import { AuthRouter } from '../routes/AuthRouter.ts'
+import { DocsRouter } from '../routes/DocsRouter.ts'
 import { UserRouter } from '../routes/UserRouter.ts'
 import { AbstractEnvironment } from './AbstractEnvironment.ts'
 import express from 'npm:express'
@@ -18,6 +18,7 @@ export class ApiEnvironment extends AbstractEnvironment {
 
     this.initializeDefaultMiddlewares(apiServer)
 
+    apiServer.use(DocsRouter)
     apiServer.use(APIRouter)
     apiServer.use(AuthRouter)
     apiServer.use(UserRouter)

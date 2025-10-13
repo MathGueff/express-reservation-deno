@@ -33,7 +33,7 @@ export class UserController {
 
       const created = await this.userRepository.createOne(newUser)
 
-      return res.send_ok('users.success.register', {
+      return res.send_ok('user.success.register', {
         data: req.body,
       })
     } catch (error) {
@@ -77,7 +77,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('users.success.update', {
+      return res.send_ok('user.success.update', {
         data: req.body,
       })
     } catch (error) {
@@ -104,7 +104,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('users.success.findById', {
+      return res.send_ok('user.success.findById', {
         data : found
       })
 
@@ -132,7 +132,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('users.success.findAll', {
+      return res.send_ok('user.success.findAll', {
         data : found
       })
     } catch (error) {
@@ -159,7 +159,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('users.success.register', {
+      return res.send_ok('user.success.register', {
         data: excluded,
       })
     } catch (error) {
