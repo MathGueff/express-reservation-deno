@@ -57,6 +57,26 @@ ReservationRouter.get(
     reservationController.findAll
 )
 
+
+/**
+ * @openapi
+ * /api/reservation/my:
+ *   get:
+ *     summary: Busca reservas do usuário
+ *     tags: [Reservation]
+ *     responses:
+ *       200:
+ *         description: reservas encontradas
+ *       404:
+ *         description: reserva não encontrada
+ */
+ReservationRouter.get(
+    '/api/reservation/my',
+    AuthMiddle,
+    reservationController.findMyReservations
+)
+
+
 /**
  * @openapi
  * /api/reservation/{id}:

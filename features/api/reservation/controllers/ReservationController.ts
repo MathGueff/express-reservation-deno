@@ -67,6 +67,23 @@ export class ReservationController{
         }
     }
 
+    findMyReservations = async (req : Request, res : Response, next : NextFunction) => {
+        try {
+            const id = req.user.id as string
+            const reservations = await this.reservationRepository.findMany({buyer : ObjectId(id)})
+
+            if(reservations.length === 0){
+                throw throwlhos.err_notFound('Nenhuma reserva encontrada')
+            }
+
+            res.send_ok('reservation.success.findMyReservations', {
+                reservations
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
     create = async (req: Request, res : Response, next : NextFunction) => {
         try {
             const {name, price, daysOfDuration} = req.body;

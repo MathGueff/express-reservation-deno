@@ -339,6 +339,22 @@
         }
       }
     },
+    "/api/reservation/my": {
+      "get": {
+        "summary": "Busca reservas do usuário",
+        "tags": [
+          "Reservation"
+        ],
+        "responses": {
+          "200": {
+            "description": "reservas encontradas"
+          },
+          "404": {
+            "description": "reserva não encontrada"
+          }
+        }
+      }
+    },
     "/api/reservation/{id}": {
       "get": {
         "summary": "Busca reserva por ID",
