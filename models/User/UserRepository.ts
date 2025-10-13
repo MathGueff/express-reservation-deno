@@ -13,13 +13,6 @@ class UserRepository extends BaseRepository<IUser> {
   ) {
     super(model)
   }
-
-  findUsersWithPagination(options : QueryOptions){
-    const find = this.model.find({})
-      .skip(options?.skip ?? 0)
-      .limit(options?.limit ?? 10)
-    return find;
-  }
 }
 
 export { UserRepository }

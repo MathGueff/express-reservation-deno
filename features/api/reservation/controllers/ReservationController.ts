@@ -35,7 +35,9 @@ export class ReservationController{
                 options = {limit, skip}
             }
 
-            const reservations = await this.reservationRepository.findReservationWithPagination(options)
+            const reservations = await this.reservationRepository.findMany({})
+                .skip(options?.skip ?? 0)
+                .limit(options?.limit ?? 10)
 
             if(reservations.length === 0){
                 throw throwlhos.err_notFound('Nenhuma reserva encontrada', {reservations})

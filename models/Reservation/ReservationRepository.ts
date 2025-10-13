@@ -13,13 +13,6 @@ class ReservationRepository extends BaseRepository<Reservation>{
     ){
         super(model)
     }
-
-    findReservationWithPagination(options : QueryOptions){
-        const find = this.model.find({})
-          .skip(options?.skip ?? 0)
-          .limit(options?.limit ?? 10)
-        return find;
-    }
 }
 
 export {ReservationRepository}

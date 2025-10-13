@@ -127,7 +127,9 @@ export class UserController {
         options = {limit, skip}
       }
 
-      const found = await this.userRepository.findUsersWithPagination(options)
+      const found = await this.userRepository.findMany({})
+        .skip(options?.skip ?? 0)
+        .limit(options?.limit ?? 10)
 
       if (found.length === 0) {
         throw throwlhos.err_notFound(
