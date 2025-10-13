@@ -3,9 +3,9 @@ import { ReservationRepository } from '../../../../models/Reservation/Reservatio
 import { ReservationRules } from '../ReservationRules.ts'
 import { throwlhos } from '../../../../globals/Throwlhos.ts'
 import { QueryOptions } from 'mongoose'
-import { IReservation } from '../../../../models/Reservation/IReservation.ts'
 import { ApiBodyEntriesMapper } from '../../../../services/ApiBodyEntriesMapper.ts'
 import { Reservation } from '../../../../models/Reservation/Reservation.ts'
+import { ObjectId } from '../../../../globals/Mongo.ts'
 
 export class ReservationController{   
     private reservationRepository: ReservationRepository;
@@ -49,11 +49,20 @@ export class ReservationController{
 
     create = async (req: Request, res : Response, next : NextFunction) => {
         try {
-            const {owner, price} = req.body;
-            this.rules.validate(...this.apiBodyEntriesMapper.exec({owner, price}))
-            await this.reservationRepository.create({owner, price})
+            const {name, price} = req.body;
+            const ownerId = req.user.id as string
+
+            this.rules.validate(...this.apiBodyEntriesMapper.exec({owner : ObjectId(ownerId), ...req.body}))
+
+            const newReservation = new Reservation({
+                name,
+                owner : ObjectId(ownerId), 
+                price : Number(price)
+            })
+
+            const created = await this.reservationRepository.create(newReservation)
             res.send_ok('reservation.success.create',{
-                data : req.body
+                data : created
             })
         } catch (error) {
             next(error)
@@ -63,13 +72,51 @@ export class ReservationController{
     reserve = async (req : Request, res : Response, next : NextFunction) =>{
         try {
             const id = req.params.id as string
-            const {buyer} = req.body as IReservation;
 
-            this.rules.validate({id}, ...this.apiBodyEntriesMapper.exec({buyer}))
+            const buyerId = req.user.id as string;
+            const buyerObjectId = ObjectId(buyerId);
+
+            if(!buyerId)
+                throw throwlhos.err_badRequest('Não foi possível fazer sua reserva, informe seu login para reservar')
+
+            this.rules.validate({id}, ...this.apiBodyEntriesMapper.exec({buyer : buyerObjectId}))
 
             const reservation = await this.reservationRepository.findById(id)
-            res.send_ok('reservation.success.reserve', {
-                reservation
+
+            if(!reservation) {
+                throw throwlhos.err_notFound('Reserva não encontrada')
+            }
+
+            if(reservation.buyer)
+                throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso')
+
+            if(reservation.isOwnerBuying(buyerId)){
+                throw throwlhos.err_badRequest('Você não pode reservar a sua própria reserva criada')
+            }
+
+            const updated = await this.reservationRepository.updateById(ObjectId(id), {
+                buyer : buyerObjectId
+            })
+
+            res.send_ok('reservation.success.reserve', 
+                updated 
+            )
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    remove = async (req : Request, res : Response, next : NextFunction) => {
+        try {
+            const id = req.params.id as string
+
+            const deleted = await this.reservationRepository.deleteById(id)
+
+            if(!deleted)
+                throw throwlhos.err_notFound('Reserva não encontrada')
+
+            res.send_ok('reservation.success.remove', {
+                data : deleted
             })
         } catch (error) {
             next(error)

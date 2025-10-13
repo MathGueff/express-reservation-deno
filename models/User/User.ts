@@ -57,10 +57,6 @@ class UserSchemaClass extends BaseSchema {
 
 const UserSchema = new UserSchemaClass().schema
 
-UserSchema.methods.comparePassword = function(password : string){
-  return bcrypt.compare(password, this.password);
-}
-
 //Criptografia da senha de forma automática com o middleware
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {

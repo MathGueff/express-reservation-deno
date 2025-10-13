@@ -10,6 +10,12 @@ export class ReservationRules extends BaseRules{
             message: 'O id deve ser válido'
         })
 
+        this.rc.addRule('name', {
+            validator: is.string,
+            message: 'Valor para name inválido!',
+        })
+
+
         this.rc.addRule('owner', {
             validator: is.objectId,
             message: 'Valor para owner inválido!',

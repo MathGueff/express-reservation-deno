@@ -1,4 +1,4 @@
-import { Response, Router } from 'express'
+import { Router } from 'express'
 import { ReservationController } from './controllers/ReservationController.ts'
 import { PaginationMiddle } from '../../../middlewares/PaginationMiddle.ts'
 import { AuthMiddle } from '../../../middlewares/AuthMiddle.ts'
@@ -24,6 +24,12 @@ ReservationRouter.post(
     '/api/reservation/reserve/:id',
     AuthMiddle,
     reservationController.reserve
+)
+
+ReservationRouter.delete(
+    '/api/reservation/:id',
+    AuthMiddle,
+    reservationController.remove
 )
 
 export {ReservationRouter}
