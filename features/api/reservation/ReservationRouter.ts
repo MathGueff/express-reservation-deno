@@ -14,6 +14,13 @@ ReservationRouter.get(
     reservationController.findAll
 )
 
+ReservationRouter.get(
+    '/api/reservation/:id',
+    AuthMiddle,
+    PaginationMiddle(),
+    reservationController.findById
+)
+
 ReservationRouter.post(
     '/api/reservation',
     AuthMiddle,

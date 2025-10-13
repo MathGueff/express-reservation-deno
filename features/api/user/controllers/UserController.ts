@@ -35,7 +35,7 @@ export class UserController {
       await this.userRepository.createOne(newUser)
 
       return res.send_ok('user.success.register', {
-        data: req.body,
+        user: req.body,
       })
     } catch (error) {
       next(error)
@@ -81,7 +81,7 @@ export class UserController {
       }
 
       return res.send_ok('user.success.update', {
-        data: req.body,
+        user: req.body,
       })
     } catch (error) {
       next(error)
@@ -108,7 +108,7 @@ export class UserController {
       }
 
       return res.send_ok('user.success.findById', {
-        data : found
+        user : found
       })
 
     } catch (error) {
@@ -136,7 +136,7 @@ export class UserController {
       }
 
       return res.send_ok('user.success.findAll', {
-        data : found
+        users : found
       })
     } catch (error) {
       next(error);
@@ -163,7 +163,7 @@ export class UserController {
       }
 
       return res.send_ok('user.success.register', {
-        data: excluded,
+        user: excluded,
       })
     } catch (error) {
       next(error)

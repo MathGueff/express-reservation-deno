@@ -49,6 +49,24 @@ export class ReservationController{
         }
     }
 
+    findById = async (req : Request, res : Response, next : NextFunction) => {
+        try {
+            const id = req.params.id as string
+
+            const reservation = await this.reservationRepository.findById(id)
+
+            if(!reservation){
+                throw throwlhos.err_notFound('Nenhuma reserva encontrada')
+            }
+
+            res.send_ok('reservation.success.findById', {
+                reservation
+            })
+        } catch (error) {
+            next(error);
+        }
+    }
+
     create = async (req: Request, res : Response, next : NextFunction) => {
         try {
             const {name, price, daysOfDuration} = req.body;
@@ -65,7 +83,7 @@ export class ReservationController{
 
             const created = await this.reservationRepository.create(newReservation)
             res.send_ok('reservation.success.create',{
-                data : created
+                reservation : created
             })
         } catch (error) {
             next(error)
@@ -131,7 +149,7 @@ export class ReservationController{
                 throw throwlhos.err_notFound('Reserva não encontrada')
 
             res.send_ok('reservation.success.remove', {
-                data : deleted
+                reservation : deleted
             })
         } catch (error) {
             next(error)
