@@ -16,11 +16,11 @@ class ReserveService {
 
     async reserve(id : string, buyerId : string, ownerId : string, price : number, session : ClientSession){
         try {
-            await this.reservationRepository.findOneAndUpdate(ObjectId(id), {buyer : ObjectId(buyerId)}).session(session)
+            await this.reservationRepository.updateOne(ObjectId(id), {buyer : ObjectId(buyerId)}).session(session)
             
-            await this.userRepository.findOneAndUpdate(ObjectId(buyerId), {$inc : {balance : -price}}).session(session);
+            await this.userRepository.updateOne(ObjectId(buyerId), {$inc : {balance : -price}}).session(session);
 
-            await this.userRepository.updateOne(ObjectId("12133223"), {$inc : {balance : price}}).session(session);
+            await this.userRepository.updateOne(ObjectId(ownerId), {$inc : {balance : price}}).session(session);
         } catch (error) {
             throw error
         }
