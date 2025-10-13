@@ -19,7 +19,7 @@ class ReservationRepository extends BaseRepository<Reservation>{
           .skip(options?.skip ?? 0)
           .limit(options?.limit ?? 10)
         return find;
-      }
+    }
 }
 
 export {ReservationRepository}

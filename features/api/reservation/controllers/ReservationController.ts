@@ -1,11 +1,13 @@
 import { NextFunction, Request, Response } from 'express'
-import { ReservationRepository } from '../../../../models/Reservation/ReservatioRepository.ts'
+import { ReservationRepository } from '../../../../models/Reservation/ReservationRepository.ts'
 import { ReservationRules } from '../ReservationRules.ts'
 import { throwlhos } from '../../../../globals/Throwlhos.ts'
 import { QueryOptions } from 'mongoose'
 import { ApiBodyEntriesMapper } from '../../../../services/ApiBodyEntriesMapper.ts'
 import { Reservation } from '../../../../models/Reservation/Reservation.ts'
-import { ObjectId } from '../../../../globals/Mongo.ts'
+import { ObjectId, StartTransaction } from '../../../../globals/Mongo.ts'
+import { ExpressReservationDB } from '../../../../database/db/ExpressReservationDB.ts'
+import { ReserveService } from '../../../../services/ReserveService.ts'
 
 export class ReservationController{   
     private reservationRepository: ReservationRepository;
@@ -71,9 +73,9 @@ export class ReservationController{
     }
 
     reserve = async (req : Request, res : Response, next : NextFunction) =>{
+        const session = await StartTransaction(ExpressReservationDB)
         try {
             const id = req.params.id as string
-
             const buyerId = req.user.id as string;
             const buyerObjectId = ObjectId(buyerId);
 
@@ -83,27 +85,39 @@ export class ReservationController{
             this.rules.validate({id}, ...this.apiBodyEntriesMapper.exec({buyer : buyerObjectId}))
 
             const reservation = await this.reservationRepository.findById(id)
-
+    
             if(!reservation) {
                 throw throwlhos.err_notFound('Reserva não encontrada')
             }
-
+    
             if(reservation.buyer)
                 throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso')
-
+    
             if(reservation.isOwnerBuying(buyerId)){
                 throw throwlhos.err_badRequest('Você não pode reservar a sua própria reserva criada')
             }
+            
+            const reserveService = new ReserveService()
+            await reserveService.reserve(
+                id, 
+                buyerId, 
+                reservation.owner.toString(), 
+                reservation.price,
+                session
+            );
 
-            const updated = await this.reservationRepository.updateById(ObjectId(id), {
-                buyer : buyerObjectId
-            })
+            await session.commitTransaction();
+
+            const reservationUpdated = await this.reservationRepository.findById(id);
 
             res.send_ok('reservation.success.reserve', 
-                updated 
+                {reservation : reservationUpdated}
             )
         } catch (error) {
+            session.abortTransaction()
             next(error)
+        } finally {
+            session.endSession();
         }
     }
 
