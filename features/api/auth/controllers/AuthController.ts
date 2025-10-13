@@ -1,10 +1,8 @@
 import { NextFunction, Request, Response } from 'npm:express'
-import { Print } from '../../../utilities/static/Print.ts'
-import { throwlhos } from '../../../globals/Throwlhos.ts'
+import { throwlhos } from '../../../../globals/Throwlhos.ts'
 import { AuthRules } from '../AuthRules.ts'
-import { IUser } from '../../../models/User/IUser.ts'
-import { AuthRepository } from '../../../models/Auth/AuthRepository.ts'
-import { Jwt } from '../../../utilities/static/Jwt.ts'
+import { AuthRepository } from '../../../../models/Auth/AuthRepository.ts'
+import { Jwt } from '../../../../utilities/static/Jwt.ts'
 
 export class AuthController {
   private authRepository: AuthRepository

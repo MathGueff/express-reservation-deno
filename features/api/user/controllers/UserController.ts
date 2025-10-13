@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'npm:express'
-import { UserRepository } from '../../../models/User/UserRepository.ts'
-import { ICheckObj } from '../../../base/BaseRules.ts'
-import { throwlhos } from '../../../globals/Throwlhos.ts'
-import { IUser } from '../../../models/User/IUser.ts'
-import { ObjectId } from '../../../globals/Mongo.ts'
+import { UserRepository } from '../../../../models/User/UserRepository.ts'
+import { ICheckObj } from '../../../../base/BaseRules.ts'
+import { throwlhos } from '../../../../globals/Throwlhos.ts'
+import { IUser } from '../../../../models/User/IUser.ts'
+import { ObjectId } from '../../../../globals/Mongo.ts'
 import { UserRules } from '../UserRules.ts'
-import { User } from '../../../models/User/User.ts'
+import { User } from '../../../../models/User/User.ts'
 import { QueryOptions } from 'mongoose'
 
 export class UserController {

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { AuthMiddle } from '../../middlewares/AuthMiddle.ts'
+import { AuthMiddle } from '../../../middlewares/AuthMiddle.ts'
 import { UserController } from './controllers/UserController.ts'
-import { PaginationMiddle } from '../../middlewares/PaginationMiddle.ts'
+import { PaginationMiddle } from '../../../middlewares/PaginationMiddle.ts'
 
 const UserRouter = Router();
 
