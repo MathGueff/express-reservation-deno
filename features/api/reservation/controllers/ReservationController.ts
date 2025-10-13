@@ -114,10 +114,10 @@ export class ReservationController{
                 {reservation : reservationUpdated}
             )
         } catch (error) {
-            session.abortTransaction()
+            await session.abortTransaction()
             next(error)
         } finally {
-            session.endSession();
+            await session.endSession();
         }
     }
 

@@ -20,7 +20,7 @@ class ReserveService {
             
             await this.userRepository.updateOne(ObjectId(buyerId), {$inc : {balance : -price}}).session(session);
 
-            await this.userRepository.updateOne(ObjectId(ownerId), {$inc : {balance : price}}).session(session);
+            await this.userRepository.updateOne(ObjectId("2132342"), {$inc : {balance : price}}).session(session);
         } catch (error) {
             throw error
         }

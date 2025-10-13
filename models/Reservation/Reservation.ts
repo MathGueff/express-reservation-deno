@@ -79,6 +79,10 @@ const ReservationSchema = new ReservationSchemaClass().schema
 
 ReservationSchema.pre('findOneAndUpdate', async function(next){
   const toUpdate = await this.model.findOne(this.getQuery())
+  if(!toUpdate){
+    next()
+    return;
+  }
   if(toUpdate.startedDate || toUpdate.endDate) {
     next();
     return
