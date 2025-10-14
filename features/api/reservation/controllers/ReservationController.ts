@@ -3,7 +3,6 @@ import { ReservationRepository } from '../../../../models/Reservation/Reservatio
 import { ReservationRules } from '../ReservationRules.ts'
 import { throwlhos } from '../../../../globals/Throwlhos.ts'
 import { QueryOptions } from 'mongoose'
-import { ApiBodyEntriesMapper } from '../../../../services/ApiBodyEntriesMapper.ts'
 import { Reservation } from '../../../../models/Reservation/Reservation.ts'
 import { ObjectId, StartTransaction } from '../../../../globals/Mongo.ts'
 import { ExpressReservationDB } from '../../../../database/db/ExpressReservationDB.ts'
@@ -11,7 +10,6 @@ import { ReserveService } from '../../../../services/ReserveService.ts'
 
 export class ReservationController{   
     private reservationRepository: ReservationRepository;
-    private apiBodyEntriesMapper : ApiBodyEntriesMapper<Partial<Reservation>>
 
     private rules: ReservationRules;
 
@@ -21,7 +19,6 @@ export class ReservationController{
     ) {
         this.reservationRepository = reservationRepository;
         this.rules = rules;
-        this.apiBodyEntriesMapper = new ApiBodyEntriesMapper()
     }
 
     findAll = async (req : Request, res : Response, next : NextFunction) => {
@@ -43,7 +40,7 @@ export class ReservationController{
                 throw throwlhos.err_notFound('Nenhuma reserva encontrada', {reservations})
             }
 
-            res.send_ok('reservation.success.getAll', {
+            res.send_ok('Reservas encontradas com sucesso', {
                 reservations
             })
         } catch (error) {
@@ -53,9 +50,7 @@ export class ReservationController{
 
     findById = async (req : Request, res : Response, next : NextFunction) => {
         try {
-            const id = req.params.id as string
-
-            this.rules.validate({id})
+            const id = req.params.id
 
             const reservation = await this.reservationRepository.findById(id)
 
@@ -63,7 +58,7 @@ export class ReservationController{
                 throw throwlhos.err_notFound('Nenhuma reserva encontrada', {reservation})
             }
 
-            res.send_ok('reservation.success.findById', {
+            res.send_ok('Reserva encontrada com sucesso', {
                 reservation
             })
         } catch (error) {
@@ -73,14 +68,15 @@ export class ReservationController{
 
     findMyReservations = async (req : Request, res : Response, next : NextFunction) => {
         try {
-            const id = req.user.id as string
+            const id = req.user.id
+
             const reservations = await this.reservationRepository.findMany({buyer : ObjectId(id)})
 
             if(reservations.length === 0){
                 throw throwlhos.err_notFound('Nenhuma reserva encontrada',{reservations})
             }
 
-            res.send_ok('reservation.success.findMyReservations', {
+            res.send_ok('Suas reservas foram encontradas com sucesso', {
                 reservations
             })
         } catch (error) {
@@ -91,19 +87,19 @@ export class ReservationController{
     create = async (req: Request, res : Response, next : NextFunction) => {
         try {
             const {name, price, daysOfDuration} = req.body;
-            const ownerId = req.user.id as string
+            const ownerId = req.user.id
 
-            this.rules.validate(...this.apiBodyEntriesMapper.exec({owner : ObjectId(ownerId), ...req.body}))
+            this.rules.validate({name}, {price},{daysOfDuration},{ownerId})
 
             const newReservation = new Reservation({
                 name,
-                owner : ObjectId(ownerId), 
+                owner: ObjectId(ownerId), 
                 price : Number(price),
                 daysOfDuration
             })
 
             const created = await this.reservationRepository.create(newReservation)
-            res.send_ok('reservation.success.create',{
+            res.send_created('Você criou sua reserva com sucesso',{
                 reservation : created
             })
         } catch (error) {
@@ -114,27 +110,30 @@ export class ReservationController{
     reserve = async (req : Request, res : Response, next : NextFunction) =>{
         const session = await StartTransaction(ExpressReservationDB)
         try {
-            const id = req.params.id as string
-            const buyerId = req.user.id as string;
-            const buyerObjectId = ObjectId(buyerId);
+            const id = req.params.id 
+            const {id : buyer, balance} = req.user
 
-            if(!buyerId)
-                throw throwlhos.err_badRequest('Não foi possível fazer sua reserva, informe seu login para reservar',{id})
-
-            this.rules.validate({id}, ...this.apiBodyEntriesMapper.exec({buyer : buyerObjectId}))
+            this.rules.validate(
+                {buyer}, {balance}
+            )
 
             const reservation = await this.reservationRepository.findById(id)
-    
+
             if(!reservation) {
                 throw throwlhos.err_notFound('Reserva não encontrada', {reservation})
             }
     
-            if(reservation.buyer)
-                throw throwlhos.err_badRequest('Desculpe, essa reserva já está em uso',{buyer : reservation.buyer})
-    
-            if(reservation.isOwnerBuying(buyerId)){
+            if(reservation.buyer){
+                throw throwlhos.err_unprocessableEntity('Desculpe, essa reserva já está em uso',{buyer : reservation.buyer})
+            }
+
+            if(reservation.price > balance){
+                throw throwlhos.err_preconditionFailed('Sua conta não possui dinheiro suficiente para a reserva')
+            }
+
+            if(reservation.owner.toString() == buyer){
                 throw throwlhos.err_badRequest('Você não pode reservar a sua própria reserva criada', {
-                    buyer : buyerId,
+                    buyer,
                     owner : reservation.owner
                 })
             }
@@ -142,7 +141,7 @@ export class ReservationController{
             const reserveService = new ReserveService()
             await reserveService.reserve(
                 id, 
-                buyerId, 
+                buyer, 
                 reservation.owner.toString(), 
                 reservation.price,
                 session
@@ -152,7 +151,7 @@ export class ReservationController{
 
             const reservationUpdated = await this.reservationRepository.findById(id);
 
-            res.send_ok('reservation.success.reserve', 
+            res.send_ok('Você fez a sua reserva com sucesso', 
                 {reservation : reservationUpdated}
             )
         } catch (error) {
@@ -172,7 +171,7 @@ export class ReservationController{
             if(!deleted)
                 throw throwlhos.err_notFound('Reserva não encontrada', {deleted})
 
-            res.send_ok('reservation.success.remove', {
+            res.send_ok('Você excluiu sua reserva com sucesso', {
                 reservation : deleted
             })
         } catch (error) {

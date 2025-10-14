@@ -5,7 +5,4 @@ export interface IUser extends IBaseInterface {
   email: string
   password: string,
   balance : number
-
-  hashPassword() : void
-  comparePassword(passwordToCompare : string) : Promise<boolean>
 }

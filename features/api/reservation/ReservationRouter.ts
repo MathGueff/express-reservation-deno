@@ -15,7 +15,7 @@ const reservationController = new ReservationController();
  *       type: apikey
  *       in: header
  *       name: Authorization
- * /api/reservation:
+ * /reservations:
  *   get:
  *     security:
  *       - jwtAuth: []
@@ -51,7 +51,7 @@ const reservationController = new ReservationController();
  *         description: Parâmetros inválidos
  */
 ReservationRouter.get(
-    '/api/reservation',
+    '/reservations',
     AuthMiddle,
     PaginationMiddle({maxLimit : 10}),
     reservationController.findAll
@@ -60,7 +60,7 @@ ReservationRouter.get(
 
 /**
  * @openapi
- * /api/reservation/my:
+ * /reservations/my:
  *   get:
  *     summary: Busca reservas do usuário
  *     tags: [Reservation]
@@ -71,7 +71,7 @@ ReservationRouter.get(
  *         description: reserva não encontrada
  */
 ReservationRouter.get(
-    '/api/reservation/my',
+    '/reservations/my',
     AuthMiddle,
     reservationController.findMyReservations
 )
@@ -79,7 +79,7 @@ ReservationRouter.get(
 
 /**
  * @openapi
- * /api/reservation/{id}:
+ * /reservations/{id}:
  *   get:
  *     summary: Busca reserva por ID
  *     tags: [Reservation]
@@ -96,7 +96,7 @@ ReservationRouter.get(
  *         description: reserva não encontrada
  */
 ReservationRouter.get(
-    '/api/reservation/:id',
+    '/reservations/:id',
     AuthMiddle,
     PaginationMiddle(),
     reservationController.findById
@@ -104,7 +104,7 @@ ReservationRouter.get(
 
 /**
  * @openapi
- * /api/reservation:
+ * /reservations:
  *   post:
  *     summary: Cria uma nova reserva
  *     tags: [Reservation]
@@ -126,14 +126,14 @@ ReservationRouter.get(
  *         description: Reserva criada
  */
 ReservationRouter.post(
-    '/api/reservation',
+    '/reservations',
     AuthMiddle,
     reservationController.create
 )
 
 /**
  * @openapi
- * /api/reservation/reserve/{id}:
+ * /reservations/reserve/{id}:
  *   put:
  *     summary: Faz a reserva para um usuário
  *     tags: [Reservation]
@@ -152,14 +152,14 @@ ReservationRouter.post(
  *         description: Reserva não encontrada
  */
 ReservationRouter.post(
-    '/api/reservation/reserve/:id',
+    '/reservations/reserve/:id',
     AuthMiddle,
     reservationController.reserve
 )
 
 /**
  * @openapi
- * /api/reservation/{id}:
+ * /reservations/{id}:
  *   delete:
  *     summary: Remove reserva por ID
  *     tags: [Reservation]
@@ -176,7 +176,7 @@ ReservationRouter.post(
  *         description: Reserva não encontrada
  */
 ReservationRouter.delete(
-    '/api/reservation/:id',
+    '/reservations/:id',
     AuthMiddle,
     reservationController.remove
 )

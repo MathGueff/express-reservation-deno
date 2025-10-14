@@ -1,13 +1,11 @@
 import { NextFunction, Request, Response } from 'npm:express'
 import { UserRepository } from '../../../../models/User/UserRepository.ts'
-import { ICheckObj } from '../../../../base/BaseRules.ts'
 import { throwlhos } from '../../../../globals/Throwlhos.ts'
-import { IUser } from '../../../../models/User/IUser.ts'
 import { ObjectId } from '../../../../globals/Mongo.ts'
 import { UserRules } from '../UserRules.ts'
 import { User } from '../../../../models/User/User.ts'
 import { QueryOptions } from 'mongoose'
-import { ApiBodyEntriesMapper } from '../../../../services/ApiBodyEntriesMapper.ts'
+import { IUser } from '../../../../models/User/IUser.ts'
 
 export class UserController {
   private userRepository: UserRepository;
@@ -22,20 +20,20 @@ export class UserController {
     this.rules = rules;
   }
 
-  register = async (req :Request, res : Response, next : NextFunction) => {
+  create = async (req :Request, res : Response, next : NextFunction) => {
     try {
-      const newUser = new User({...req.body} as IUser)
-      
-      const apiBodyEntriesMapper = new ApiBodyEntriesMapper<User>()
+      const {name, email, password, balance} = req.body
 
       this.rules.validate(
-        ...apiBodyEntriesMapper.exec(newUser)
+        {name}, {email}, {password}, {balance, isRequiredField : false}
       )
+      
+      const newUser = new User({ name, email, password, balance})
 
-      await this.userRepository.createOne(newUser)
+      const created = await this.userRepository.createOne(newUser)
 
-      return res.send_ok('user.success.register', {
-        user: req.body,
+      return res.send_created('Usuário cadastrado com sucesso', {
+        user: created,
       })
     } catch (error) {
       next(error)
@@ -44,44 +42,34 @@ export class UserController {
 
   update = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.params.id as string
-      const update = new User({...req.body} as IUser)
+      const id = req.params.id
 
-      if(update.balance)
-        update.balance = Number(update.balance)
+      const {name, email, balance} = req.body;
 
-      const apiBodyEntriesMapper = new ApiBodyEntriesMapper<User>();
+      this.rules.validate(
+        {name, isRequiredField: false},
+        {email, isRequiredField: false},
+        {balance, isRequiredField: false}
+      )
 
-      const toValidate : ICheckObj[] = [
-        ...apiBodyEntriesMapper.exec(update)
-      ]
-      
-      if(toValidate.length === 0){
-        throw throwlhos.err_badRequest('Informe um campo para ser atualizado', {update});
-      }
-
-      toValidate.push({id})
-
-      this.rules.validate(...toValidate)
-      
-      if(update.password){
-        await update.hashPassword()
+      const update : Partial<IUser> = {
+        email, name, balance        
       }
       
       const updated = await this.userRepository.updateOne(
-        {_id: ObjectId(id)}, 
+        {_id: ObjectId(id)},
         { $set: update }
       )
 
       if (!updated) {
         throw throwlhos.err_notFound(
           "Usuário não encontrado",
-          { id, ...req.body },
+          { id },
         )
       }
 
-      return res.send_ok('user.success.update', {
-        user: req.body,
+      return res.send_ok('Usuário atualizado com sucesso', {
+        user: updated
       })
     } catch (error) {
       next(error)
@@ -90,11 +78,7 @@ export class UserController {
 
   findById = async (req : Request, res : Response, next : NextFunction) => {
     try {
-      const id = req.params.id as string
-
-      this.rules.validate(
-        { id }
-      )
+      const id = req.params.id
 
       const found = await this.userRepository.findOne({
         _id: ObjectId(id),
@@ -103,11 +87,11 @@ export class UserController {
       if (!found) {
         throw throwlhos.err_notFound(
           "Usuário não encontrado",
-          { id, ...req.body },
+          { id },
         )
       }
 
-      return res.send_ok('user.success.findById', {
+      return res.send_ok('Usuário encontrado com sucesso', {
         user : found
       })
 
@@ -138,7 +122,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('user.success.findAll', {
+      return res.send_ok('Usuários encontrados com sucesso', {
         users : found
       })
     } catch (error) {
@@ -148,11 +132,7 @@ export class UserController {
 
   delete = async (req : Request, res : Response, next : NextFunction) => {
     try {
-      const id = req.params.id as string
-      
-      this.rules.validate(
-        { id }
-      )
+      const id = req.params.id
 
       const excluded = await this.userRepository.deleteOne({
         _id: ObjectId(id),
@@ -161,11 +141,11 @@ export class UserController {
       if (!excluded) {
         throw throwlhos.err_notFound(
           "Usuário não encontrado",
-          { id, ...req.body },
+          { id },
         )
       }
 
-      return res.send_ok('user.success.register', {
+      return res.send_ok('Usuário removido com sucesso', {
         user: excluded,
       })
     } catch (error) {

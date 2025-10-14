@@ -8,7 +8,7 @@
     "description": ""
   },
   "paths": {
-    "/api/user": {
+    "/users": {
       "get": {
         "security": [
           {
@@ -125,7 +125,7 @@
         }
       }
     },
-    "/api/user/{id}": {
+    "/users/{id}": {
       "put": {
         "summary": "Atualiza usuário por ID",
         "tags": [
@@ -251,7 +251,7 @@
         }
       }
     },
-    "/api/reservation": {
+    "/reservations": {
       "get": {
         "security": [
           {
@@ -339,7 +339,7 @@
         }
       }
     },
-    "/api/reservation/my": {
+    "/reservations/my": {
       "get": {
         "summary": "Busca reservas do usuário",
         "tags": [
@@ -355,7 +355,7 @@
         }
       }
     },
-    "/api/reservation/{id}": {
+    "/reservations/{id}": {
       "get": {
         "summary": "Busca reserva por ID",
         "tags": [
@@ -405,7 +405,7 @@
         }
       }
     },
-    "/api/reservation/reserve/{id}": {
+    "/reservations/reserve/{id}": {
       "put": {
         "summary": "Faz a reserva para um usuário",
         "tags": [

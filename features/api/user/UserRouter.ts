@@ -14,7 +14,7 @@ const userController = new UserController();
  *       type: apikey
  *       in: header
  *       name: Authorization
- * /api/user:
+ * /users:
  *   get:
  *     security:
  *       - jwtAuth: []
@@ -50,7 +50,7 @@ const userController = new UserController();
  *         description: Parâmetros inválidos
  */
 UserRouter.get(
-    '/api/user/',
+    '/users/',
     AuthMiddle,
     PaginationMiddle({maxLimit : 10}),
     userController.findAll
@@ -75,14 +75,14 @@ UserRouter.get(
  *         description: Usuário não encontrado
  */
 UserRouter.get(
-    '/api/user/:id',
+    '/users/:id',
     AuthMiddle,
     userController.findById
 )
 
 /**
  * @openapi
- * /api/user:
+ * /users:
  *   post:
  *     summary: Cria um novo usuário
  *     tags: [User]
@@ -106,13 +106,13 @@ UserRouter.get(
  *         description: Usuário criado
  */
 UserRouter.post(
-    '/api/user',
-    userController.register
+    '/users',
+    userController.create
 )
 
 /**
  * @openapi
- * /api/user/{id}:
+ * /users/{id}:
  *   put:
  *     summary: Atualiza usuário por ID
  *     tags: [User]
@@ -129,14 +129,14 @@ UserRouter.post(
  *         description: Usuário não encontrado
  */
 UserRouter.put(
-    '/api/user/:id',
+    '/users/:id',
     AuthMiddle,
     userController.update
 )
 
 /**
  * @openapi
- * /api/user/{id}:
+ * /users/{id}:
  *   delete:
  *     summary: Remove usuário por ID
  *     tags: [User]
@@ -153,7 +153,7 @@ UserRouter.put(
  *         description: Usuário não encontrado
  */
 UserRouter.delete(
-    '/api/user/:id',
+    '/users/:id',
     AuthMiddle,
     userController.delete
 )

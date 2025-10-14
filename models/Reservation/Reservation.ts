@@ -21,19 +21,6 @@ export class Reservation implements IReservation{
     this.startedDate = reservation.startedDate
     this.endDate = reservation.endDate
   }
-
-  isOwnerBuying(buyer : string): boolean {
-    return this.owner.toString() == buyer
-  }
-
-  // isReservationExpired(): boolean {
-  //   if(!this.startedDate) { 
-  //     return false
-  //   }
-  //   const interval = (new Date().getTime() - this.startedDate.getTime())
-  //   console.log(interval)
-  //   return !!(true)
-  // }
 }
 
 export class ReservationSchemaClass extends BaseSchema{
@@ -42,7 +29,8 @@ export class ReservationSchemaClass extends BaseSchema{
         name : {
           type : string,
           required: true,
-          unique: true
+          unique: true,
+          minlength : 6
         },
         owner : {
             type : ObjectId,
@@ -55,11 +43,13 @@ export class ReservationSchemaClass extends BaseSchema{
         },
         price : {
           type : Number,
-          required : true
+          required : true,
+          min: 0
         },
         daysOfDuration : {
           type : Number,
-          required : true
+          required : true,
+          min: 1
         },
         startedDate : {
           type : Date,

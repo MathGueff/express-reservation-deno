@@ -1,0 +1,31 @@
+Utilizar pacote responser para padronizacao das respostas
+Utilizar request-check e rules para validação
+Aplicar conceito de transações
+Exibição do protótipo _v0 do documento
+Como foi feita essa token e o que contém nela
+Uso de camelCase no projeto
+Nome dos arquivos user-repository fora do padrão sempre usar o exportado
+Uso de de Indentação 2 espaços
+Leitura da documentação back-end
+Adicionarem o morgan 
+Adicionar o isness 
+JWT padrão BEARER
+
+
+
+MEUS ERROS:
+
+400 -> 409 ou 422 ao tentar uma reserva já feita
+200 -> 201 ao cadastrar
+
+remover desestructiring terrível dos controllers
+
+
+async hashPassword() {
+    const salt = await bcrypt.genSalt(10)
+    this.password = await bcrypt.hash(this.password, salt)
+  }
+
+  async comparePassword(passwordToCompare: string) {
+    return await bcrypt.compare(passwordToCompare, this.password)
+  }

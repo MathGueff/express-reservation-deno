@@ -14,57 +14,46 @@ export class User implements IUser {
     this.password = user.password
     this.balance = user.balance
   }
-
-  async hashPassword(){
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-  }
-
-  async comparePassword(passwordToCompare : string){
-    return await bcrypt.compare(passwordToCompare, this.password)
-  }
 }
 
 class UserSchemaClass extends BaseSchema {
   constructor() {
     //Mensagens de erro para required, unique, minLength e outros já são definidas no BaseSchema
     super({
-      name: { 
-        type: String, 
-        required: true, 
-        unique: true 
-      },
-      email: { 
-        type: String, 
-        required: true, 
-        unique: true,  
-        match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'O email deve ter um formato válido'] //Não definido no Base
-      },
-      password: { 
-        type: String, 
+      name: {
+        type: String,
         required: true,
-        minlength : [6, 'Para uma senha segura digite no mínimo 6 caracteres']
+        unique: true,
+        minlength: 3
       },
-      balance : {
+      email: {
+        type: String,
+        required: true,
+        unique: true,
+        match: [/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, 'O email deve ter um formato válido'], //Não definido no Base
+      },
+      password: {
+        type: String,
+        required: true,
+        minlength: [6, 'Para uma senha segura digite no mínimo 6 caracteres'],
+      },
+      balance: {
         type: Number,
-        required : true,
+        required: true,
         min: 0,
         default: 0
-      }
+      },
     })
   }
 }
 
 const UserSchema = new UserSchemaClass().schema
 
-//Criptografia da senha de forma automática com o middleware
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    return next();
-  }
+UserSchema.pre('save', async function save(next) {
+  if (!this.isModified('password')) return next();
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
-  next();
+  return next();
 });
 
 UserSchema.loadClass(User)

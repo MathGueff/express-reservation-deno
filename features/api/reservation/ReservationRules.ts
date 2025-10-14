@@ -6,14 +6,20 @@ export class ReservationRules extends BaseRules{
         super()
 
         this.rc.addRule('id', {
-            validator: is.string,
+            validator: is.objectId,
             message: 'O id deve ser válido'
         })
 
-        this.rc.addRule('name', {
-            validator: is.string,
-            message: 'Valor para name inválido!',
-        })
+        this.rc.addRules('name', [
+            {
+                validator : is.string,
+                message : 'O nome deve ser uma string'
+            },
+            {
+                validator : (name : string) => name.length >= 6,
+                message : 'O nome é muito curto, informe pelo menos 6 caracteres'
+            },
+        ])
 
 
         this.rc.addRule('owner', {
@@ -26,14 +32,26 @@ export class ReservationRules extends BaseRules{
             message: 'Valor para buyer inválido!',
         })
 
-        this.rc.addRule('price', {
-            validator: is.number,
-            message: 'Valor para senha inválido!',
-        })
+        this.rc.addRules('price', [
+            {
+                validator: is.number,
+                message: 'Valor para preço inválido!',
+            },
+            {
+                validator : (price : number) => price >= 0,
+                message: 'O preço não pode ser negativo'
+            }
+        ])
 
-        this.rc.addRule('daysOfDuration', {
-            validator: is.number,
-            message: 'Valor dias de duração inválido!',
-        })
+        this.rc.addRules('daysOfDuration', [
+            {
+                validator: is.number,
+                message: 'Valor inválido para os dias de duração',
+            },
+            {
+                validator : (days : number) => days >= 1,
+                message: 'A reserva deve ter pelo menos 1 dia de duração'
+            }
+        ])
     }
 }

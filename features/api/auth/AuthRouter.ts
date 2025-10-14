@@ -21,7 +21,7 @@ const authController = new AuthController();
  *         description: Token inválido ou ausente
  */
 AuthRouter.get(
-    '/api/auth/me',
+    '/auth/me',
     AuthMiddle,
     authController.me
 )
@@ -73,7 +73,7 @@ AuthRouter.get(
  *
  */
 AuthRouter.post(
-    '/api/auth',
+    '/auth',
     authController.login
 )
 

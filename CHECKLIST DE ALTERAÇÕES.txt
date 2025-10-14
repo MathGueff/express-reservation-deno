@@ -1,0 +1,36 @@
+CHECKLIST DE ALTERAÇÕES:
+
+CONTROLLER (validar e pegar as informações da request)
+- Verificar se todas validações estão no controller
+- Verificar se os controllers CRIAM INSTÂNCIA DOS MODELS
+
+MODEL (modelagem referente a feature)
+- Verificar se recebe e retorna apenas tipos primitivos
+- Confirmar nenhuma interação com outra layer (service, route, controller)
+- Propriedades privadas começam com _
+- Verificar se não há nenhum throw
+
+Atributos privados e públicos
+Constructor
+Getters
+Setters
+Métodos de instância privados
+Métodos de instância públicos
+Métodos estáticos privados
+Métodos estáticos públicos
+
+SERVICE (validação de erros e interação entre repositories)
+- Deve injetar apenas repositories
+- Não pode conter query direta (usar repository para isso)
+- Deve conter regras de exibição de dados e qual método da repository usar
+
+REPOSITORY (queries no banco de dados)
+- Verificar se faz todas as queries 
+- Sem throw de erros (retornar null no lugar)
+- Retornar instâncias do model
+- CREATE e UPDATE devem receber CLASSES do tipo Model como parâmetro
+- Injeção de dependência para acesso ao banco
+- Métodos devem receber o respectivo model como argumento
+
+
+ROUTER -> CONTROLLER -> SERVICE -> REPOSITORY -> MODEL

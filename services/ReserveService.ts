@@ -3,7 +3,6 @@ import { ReservationRepository } from '../models/Reservation/ReservationReposito
 import { UserRepository } from '../models/User/UserRepository.ts'
 import { ObjectId } from '../globals/Mongo.ts'
 import { Print } from '../utilities/static/Print.ts'
-import { printMiddle } from '../middlewares/PrintMiddle.ts'
 
 class ReserveService {
     private reservationRepository : ReservationRepository;
@@ -12,7 +11,6 @@ class ReserveService {
     constructor(){
         this.reservationRepository = new ReservationRepository();
         this.userRepository = new UserRepository();
-
     }
 
     async reserve(id : string, buyerId : string, ownerId : string, price : number, session : ClientSession){
