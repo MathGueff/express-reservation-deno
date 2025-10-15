@@ -8,16 +8,8 @@ const UserRouter = Router()
 const userController = new UserController()
 /**
  * @openapi
- * components:
- *   securitySchemes:
- *     jwtAuth:
- *       type: apikey
- *       in: header
- *       name: Authorization
  * /users:
  *   get:
- *     security:
- *       - jwtAuth: []
  *     summary: Busca todos os usuários com paginação
  *     tags: [User]
  *     parameters:
@@ -75,7 +67,7 @@ UserRouter.get(
  *         description: Usuário não encontrado
  */
 UserRouter.get(
-  '/users/:id',
+  '/users/:userId',
   AuthMiddle,
   userController.findById,
 )
@@ -129,7 +121,7 @@ UserRouter.post(
  *         description: Usuário não encontrado
  */
 UserRouter.put(
-  '/users/:id',
+  '/users/:userId',
   AuthMiddle,
   userController.update,
 )
@@ -153,7 +145,7 @@ UserRouter.put(
  *         description: Usuário não encontrado
  */
 UserRouter.delete(
-  '/users/:id',
+  '/users/:userId',
   AuthMiddle,
   userController.delete,
 )

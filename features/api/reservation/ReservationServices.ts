@@ -128,9 +128,10 @@ export class ReservationService {
 
   async remove(id: string) {
     const deleted = await this.reservationRepository.deleteById(id)
+    console.log(deleted)
 
     if (!deleted) {
-      throw throwlhos.err_notFound('Reserva não encontrada', { deleted })
+      throw throwlhos.err_notFound('Reserva não encontrada', { reservation : deleted })
     }
 
     return deleted

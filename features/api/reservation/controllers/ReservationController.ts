@@ -44,7 +44,7 @@ export class ReservationController {
 
   findById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.params.id
+      const id = req.params.reservationId
 
      const reservation = await this.reservationService.findById(id);
 
@@ -95,7 +95,7 @@ export class ReservationController {
 
   update = async (req :Request, res : Response, next : NextFunction) => {
     try {
-      const id = req.params.id
+      const id = req.params.reservationId
       const {price, name, daysOfDuration} = req.body
 
       this.rules.validate({name, isRequiredField : false}, {price, isRequiredField : false}, {daysOfDuration, isRequiredField : false})
@@ -117,7 +117,7 @@ export class ReservationController {
 
   reserve = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.params.id
+      const id = req.params.reservationId
       const { id: buyer, balance } = req.user
 
       this.rules.validate(
@@ -164,7 +164,7 @@ export class ReservationController {
 
   remove = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.params.id as string
+      const id = req.params.reservationId
 
       const deleted = await this.reservationService.remove(id)
 

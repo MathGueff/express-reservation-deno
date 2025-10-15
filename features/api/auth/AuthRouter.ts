@@ -10,15 +10,20 @@ const authController = new AuthController()
  * @openapi
  * /auth/me:
  *   get:
+ *     security:
+ *       - bearerAuth: []
  *     summary: Retorna informações do usuário autenticado
  *     tags: [Auth]
- *     security:
- *       - TokenAuth: []
  *     responses:
  *       200:
- *         description: Usuário autenticado retornado com sucesso
+ *         description: Informações da sua conta recuperadas com sucesso 
+ *         content:
+ *           application/json:
+ *             schema:
  *       401:
- *         description: Token inválido ou ausente
+ *         description: Unauthorized
+ *       404:
+ *         description: Not Found
  */
 AuthRouter.get(
   '/auth/me',
@@ -28,14 +33,7 @@ AuthRouter.get(
 
 /**
  * @openapi
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- *
- * /api/auth:
+ * /auth:
  *   post:
  *     summary: Realiza login e retorna o token JWT
  *     tags: [Auth]
@@ -77,7 +75,7 @@ AuthRouter.post(
 )
 
 AuthRouter.patch(
-  '/auth/change-password/:id',
+  '/auth/change-password',
   AuthMiddle,
   authController.changePassword,
 )

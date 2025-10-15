@@ -9,16 +9,8 @@ const reservationController = new ReservationController()
 
 /**
  * @openapi
- * components:
- *   securitySchemes:
- *     jwtAuth:
- *       type: apikey
- *       in: header
- *       name: Authorization
  * /reservations:
  *   get:
- *     security:
- *       - jwtAuth: []
  *     summary: Busca todas as reservas com paginação
  *     tags: [Reservation]
  *     parameters:
@@ -94,7 +86,7 @@ ReservationRouter.get(
  *         description: reserva não encontrada
  */
 ReservationRouter.get(
-  '/reservations/:id',
+  '/reservations/:reservationId',
   AuthMiddle,
   PaginationMiddle(),
   reservationController.findById,
@@ -150,7 +142,7 @@ ReservationRouter.post(
  *         description: Reserva não encontrada
  */
 ReservationRouter.post(
-  '/reservations/reserve/:id',
+  '/reservations/reserve/:reservationId',
   AuthMiddle,
   reservationController.reserve,
 )
@@ -176,7 +168,7 @@ ReservationRouter.post(
  *         description: Reserva não encontrada
  */
 ReservationRouter.post(
-  '/reservations/unlink/:id',
+  '/reservations/unlink/:reservationId',
   AuthMiddle,
   reservationController.unlink,
 )
@@ -202,7 +194,7 @@ ReservationRouter.post(
  *         description: Reserva não encontrada
  */
 ReservationRouter.put(
-  '/reservations/:id',
+  '/reservations/:reservationId',
   AuthMiddle,
   reservationController.update,
 )
@@ -226,7 +218,7 @@ ReservationRouter.put(
  *         description: Reserva não encontrada
  */
 ReservationRouter.delete(
-  '/reservations/:id',
+  '/reservations/:reservationId',
   AuthMiddle,
   reservationController.remove,
 )

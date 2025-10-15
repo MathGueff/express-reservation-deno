@@ -18,60 +18,9 @@ export class UserController {
     this.rules = rules
   }
 
-  create = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { name, email, password, balance } = req.body
-
-      this.rules.validate(
-        { name },
-        { email },
-        { password },
-        { balance, isRequiredField: false },
-      )
-
-      const newUser = new User({ name, email, password, balance })
-
-      const created = await this.userService.create(newUser)
-
-      return res.send_created('Usuário criado', {
-        user: created,
-      })
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  update = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const id = req.params.id
-
-      const { name, email, balance } = req.body
-
-      this.rules.validate(
-        { name, isRequiredField: false },
-        { email, isRequiredField: false },
-        { balance, isRequiredField: false },
-      )
-
-      const update: Partial<IUser> = {
-        email,
-        name,
-        balance,
-      }
-
-      const updated = await this.userService.update(id, update)
-
-      return res.send_ok('Usuário atualizado', {
-        user: updated,
-      })
-    } catch (error) {
-      next(error)
-    }
-  }
-
   findById = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.params.id
+      const id = req.params.userId
 
       const found = await this.userService.findById(id)
 
@@ -103,9 +52,60 @@ export class UserController {
     }
   }
 
+  create = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { name, email, password, balance } = req.body
+
+      this.rules.validate(
+        { name },
+        { email },
+        { password },
+        { balance, isRequiredField: false },
+      )
+
+      const newUser = new User({ name, email, password, balance })
+
+      const created = await this.userService.create(newUser)
+
+      return res.send_created('Usuário criado', {
+        user: created,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  update = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const id = req.params.userId
+
+      const { name, email, balance } = req.body
+
+      this.rules.validate(
+        { name, isRequiredField: false },
+        { email, isRequiredField: false },
+        { balance, isRequiredField: false },
+      )
+
+      const update: Partial<IUser> = {
+        email,
+        name,
+        balance,
+      }
+
+      const updated = await this.userService.update(id, update)
+
+      return res.send_ok('Usuário atualizado', {
+        user: updated,
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
   delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.params.id
+      const id = req.params.userId
 
       const excluded = await this.userService.remove(id)
 

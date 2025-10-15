@@ -6,7 +6,7 @@ const DocsRouter = Router()
 const apiExpressReservation = new Swagger({
   title: 'API Reserva Express',
   version: '1.0.0',
-  routerPaths: ['./features/api/user/UserRouter.ts', './features/api/auth/AuthRouter.ts', './features/api/reservation/ReservationRouter.ts'],
+  routerPaths: ['./features/api/user/UserRouter.ts', './features/api/auth/AuthRouter.ts', './features/api/reservation/ReservationRouter.ts', './config/Swagger.ts'],
 })
 
 DocsRouter.use(

@@ -10,11 +10,6 @@
   "paths": {
     "/users": {
       "get": {
-        "security": [
-          {
-            "jwtAuth": []
-          }
-        ],
         "summary": "Busca todos os usuários com paginação",
         "tags": [
           "User"
@@ -177,26 +172,34 @@
     },
     "/auth/me": {
       "get": {
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "summary": "Retorna informações do usuário autenticado",
         "tags": [
           "Auth"
         ],
-        "security": [
-          {
-            "TokenAuth": []
-          }
-        ],
         "responses": {
           "200": {
-            "description": "Usuário autenticado retornado com sucesso"
+            "description": "Informações da sua conta recuperadas com sucesso",
+            "content": {
+              "application/json": {
+                "schema": null
+              }
+            }
           },
           "401": {
-            "description": "Token inválido ou ausente"
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
           }
         }
       }
     },
-    "/api/auth": {
+    "/auth": {
       "post": {
         "summary": "Realiza login e retorna o token JWT",
         "tags": [
@@ -253,11 +256,6 @@
     },
     "/reservations": {
       "get": {
-        "security": [
-          {
-            "jwtAuth": []
-          }
-        ],
         "summary": "Busca todas as reservas com paginação",
         "tags": [
           "Reservation"
@@ -493,14 +491,9 @@
   },
   "components": {
     "securitySchemes": {
-      "jwtAuth": {
-        "type": "apikey",
-        "in": "header",
-        "name": "Authorization"
-      },
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer",
+        "in": "bearer",
         "bearerFormat": "JWT"
       }
     }

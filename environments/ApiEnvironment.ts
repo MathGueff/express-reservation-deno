@@ -24,9 +24,8 @@ export class ApiEnvironment extends AbstractEnvironment {
     apiServer.use(AuthRouter)
     apiServer.use(UserRouter)
     apiServer.use(ReservationRouter)
-
-    const r = new Responserror()
-    apiServer.use(r.errorHandler)
+    const responseError = new Responserror()
+    apiServer.use(responseError.errorHandler)
 
     this.listen(apiServer)
   }
