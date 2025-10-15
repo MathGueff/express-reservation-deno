@@ -10,6 +10,7 @@
     "@zarco/isness": "jsr:@zarco/isness@^0.1.18",
     "bcrypt": "npm:bcrypt@^6.0.0",
     "express": "npm:express@^4.18.2",
+    "fn-code": "npm:fn-code@^0.1.5",
     "jsonwebtoken": "npm:jsonwebtoken@^9.0.2",
     "jwt-decode": "npm:jwt-decode@^4.0.0",
     "node-poppler": "npm:node-poppler@^8.0.4",

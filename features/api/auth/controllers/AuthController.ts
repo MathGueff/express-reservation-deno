@@ -1,21 +1,18 @@
 import { NextFunction, Request, Response } from 'npm:express'
 import { throwlhos } from '../../../../globals/Throwlhos.ts'
 import { AuthRules } from '../AuthRules.ts'
-import { AuthRepository } from '../../../../models/Auth/AuthRepository.ts'
-import bcrypt from 'bcrypt'
-import jwt from 'jsonwebtoken'
-import { Env } from '../../../../config/Env.ts'
+import { AuthService } from '../AuthService.ts'
 
 export class AuthController {
-  private authRepository: AuthRepository
+  private authService: AuthService
 
   private rules: AuthRules
 
   constructor(
-    authRepository: AuthRepository = new AuthRepository(),
+    authService: AuthService = new AuthService(),
     rules = new AuthRules(),
   ) {
-    this.authRepository = authRepository
+    this.authService = authService
     this.rules = rules
   }
 
@@ -39,17 +36,8 @@ export class AuthController {
 
       this.rules.validate({ email }, { password })
 
-      const founded = await this.authRepository.findOne({ email })
-      const checked = await bcrypt.compare(password, founded?.password)
-
-      if (!founded || !checked) {
-        throw throwlhos.err_unauthorized('Email ou senha estão incorretos', {
-          email,
-          password,
-        })
-      }
-
-      const token = jwt.sign({ id: founded.id }, Env.jwtSecret, { expiresIn: Env.authAccessTokenExpiration })
+      const token = await this.authService.login(email, password);
+      
       return res.send_ok('Login realizado com sucesso', {
         token,
       })
