@@ -35,7 +35,7 @@ export class UserController {
 
       const created = await this.userRepository.createOne(newUser)
 
-      return res.send_created('Usuário cadastrado com sucesso', {
+      return res.send_created('Usuário criado', {
         user: created,
       })
     } catch (error) {
@@ -73,7 +73,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('Usuário atualizado com sucesso', {
+      return res.send_ok('Usuário atualizado', {
         user: updated,
       })
     } catch (error) {
@@ -96,7 +96,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('Usuário encontrado com sucesso', {
+      return res.send_ok('Usuário encontrado', {
         user: found,
       })
     } catch (error) {
@@ -125,7 +125,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('Usuários encontrados com sucesso', {
+      return res.send_ok('Usuários encontrados', {
         users: found,
       })
     } catch (error) {
@@ -148,7 +148,7 @@ export class UserController {
         )
       }
 
-      return res.send_ok('Usuário removido com sucesso', {
+      return res.send_ok('Usuário removido', {
         user: excluded,
       })
     } catch (error) {

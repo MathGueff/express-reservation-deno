@@ -39,7 +39,7 @@ export class ReservationController {
         throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservations })
       }
 
-      res.send_ok('Reservas encontradas com sucesso', {
+      res.send_ok('Reservas encontradas', {
         reservations,
       })
     } catch (error) {
@@ -57,7 +57,7 @@ export class ReservationController {
         throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservation })
       }
 
-      res.send_ok('Reserva encontrada com sucesso', {
+      res.send_ok('Reserva encontrada', {
         reservation,
       })
     } catch (error) {
@@ -75,7 +75,7 @@ export class ReservationController {
         throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservations })
       }
 
-      res.send_ok('Suas reservas foram encontradas com sucesso', {
+      res.send_ok('Suas reservas foram encontradas', {
         reservations,
       })
     } catch (error) {
@@ -98,7 +98,7 @@ export class ReservationController {
       })
 
       const created = await this.reservationRepository.create(newReservation)
-      res.send_created('Você criou sua reserva com sucesso', {
+      res.send_created('Reserva criada', {
         reservation: created,
       })
     } catch (error) {
@@ -123,18 +123,18 @@ export class ReservationController {
       }
 
       if (reservation.owner.toString() == buyer) {
-        throw throwlhos.err_badRequest('Você não pode reservar a sua própria reserva criada', {
+        throw throwlhos.err_badRequest('Não é possível reservar o que você mesmo criou', {
           buyer,
           owner: reservation.owner,
         })
       }
 
       if (reservation.buyer) {
-        throw throwlhos.err_unprocessableEntity('Desculpe, essa reserva já está em uso', { buyer: reservation.buyer })
+        throw throwlhos.err_unprocessableEntity('A reserva já está em uso', { buyer: reservation.buyer })
       }
 
       if (reservation.price > balance) {
-        throw throwlhos.err_preconditionFailed('Sua conta não possui dinheiro suficiente para a reserva')
+        throw throwlhos.err_preconditionFailed('Saldo insuficiente para a compra da reserva')
       }
 
       const reserveService = new ReserveService()
@@ -147,14 +147,14 @@ export class ReservationController {
       )
 
       if(!reservationUpdated) {
-        throw throwlhos.err_internalServerError('Não foi possível fazer sua reserva', {reservation : reservationUpdated})
+        throw throwlhos.err_internalServerError('Ocorreu um erro ao realizar a reserva', {reservation : reservationUpdated})
       }
-      
+
       reservationUpdated.startedDate = new Date()
       reservationUpdated.endDate = new Date(new Date().setDate(new Date().getDate() + reservationUpdated.daysOfDuration))
 
       reservationUpdated.save();
-      res.send_ok('Você fez a sua reserva com sucesso', { reservation: reservationUpdated })
+      res.send_ok('Reservado com sucesso', { reservation: reservationUpdated })
     } catch (error) {
       next(error)
     } 
