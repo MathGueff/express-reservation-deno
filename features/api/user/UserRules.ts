@@ -42,5 +42,16 @@ export class UserRules extends BaseRules {
         message: 'A senha deve conter pelo menos 6 caracteres',
       },
     ])
+
+    this.rc.addRules('balance', [
+      {
+        validator: is.number,
+        message: 'O saldo deve ser um número',
+      },
+      {
+        validator: (balance : number) => balance >= 0,
+        message: 'O saldo não pode ser negativo',
+      },
+    ])
   }
 }

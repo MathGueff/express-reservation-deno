@@ -1,22 +1,24 @@
 import { NextFunction, Request, Response } from 'express'
-import { ReservationRepository } from '../../../../models/Reservation/ReservationRepository.ts'
 import { ReservationRules } from '../ReservationRules.ts'
 import { throwlhos } from '../../../../globals/Throwlhos.ts'
 import { QueryOptions } from 'mongoose'
 import { Reservation } from '../../../../models/Reservation/Reservation.ts'
 import { ObjectId } from '../../../../globals/Mongo.ts'
 import { ReserveService } from '../../../../services/ReserveService.ts'
+import { ReservationService } from '../ReservationServices.ts'
 
 export class ReservationController {
-  private reservationRepository: ReservationRepository
-
+  private reservationService: ReservationService
+  private reserveService: ReserveService 
   private rules: ReservationRules
 
   constructor(
-    reservationRepository: ReservationRepository = new ReservationRepository(),
+    reservationService: ReservationService = new ReservationService(),
+    reserveService: ReserveService = new ReserveService(),
     rules = new ReservationRules(),
   ) {
-    this.reservationRepository = reservationRepository
+    this.reservationService = reservationService
+    this.reserveService = reserveService
     this.rules = rules
   }
 
@@ -30,14 +32,8 @@ export class ReservationController {
         options = { limit, skip }
       }
 
-      const reservations = await this.reservationRepository.findMany({})
-        .skip(options?.skip ?? 0)
-        .limit(options?.limit ?? 10)
-
-      if (reservations.length === 0) {
-        throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservations })
-      }
-
+      const reservations = await this.reservationService.findAll(options);
+      
       res.send_ok('Reservas encontradas', {
         reservations,
       })
@@ -50,11 +46,7 @@ export class ReservationController {
     try {
       const id = req.params.id
 
-      const reservation = await this.reservationRepository.findById(id)
-
-      if (!reservation) {
-        throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservation })
-      }
+     const reservation = await this.reservationService.findById(id);
 
       res.send_ok('Reserva encontrada', {
         reservation,
@@ -68,16 +60,7 @@ export class ReservationController {
     try {
       const id = req.user.id
 
-      const reservations = await this.reservationRepository.findMany({ 
-        $or : [
-          {buyer: ObjectId(id)}, 
-          {owner : ObjectId(id)}
-        ]
-       })
-
-      if (reservations.length === 0) {
-        throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservations })
-      }
+      const reservations = await this.reservationService.findMyReservations(id)
 
       res.send_ok('Suas reservas foram encontradas', {
         reservations,
@@ -101,7 +84,7 @@ export class ReservationController {
         daysOfDuration,
       })
 
-      const created = await this.reservationRepository.create(newReservation)
+      const created = await this.reservationService.create(newReservation);
       res.send_created('Reserva criada', {
         reservation: created,
       })
@@ -121,17 +104,7 @@ export class ReservationController {
         name, price, daysOfDuration
       }
 
-      const reservation = await this.reservationRepository.findById(id)
-
-      if(!reservation){
-        throw throwlhos.err_notFound('Nenhuma reserva encontrada')
-      }
-
-      if(reservation.buyer){
-        throw throwlhos.err_unprocessableEntity('Não é possível alterar a reserva enquanto estiver em uso')
-      }
-
-      await this.reservationRepository.updateById(id, update)
+     const reservation = await this.reservationService.update(id, update)
 
       res.send_ok('Reserva atualizada', {
         reservation
@@ -152,30 +125,9 @@ export class ReservationController {
         { balance },
       )
 
-      const reservation = await this.reservationRepository.findById(id)
+      const reservation = await this.reservationService.reserve(id, buyer, balance)
 
-      if (!reservation) {
-        throw throwlhos.err_notFound('Reserva não encontrada', { reservation })
-      }
-
-      if (reservation.owner.toString() == buyer) {
-        throw throwlhos.err_badRequest('Não é possível reservar sua própria reserva', {
-          buyer,
-          owner: reservation.owner,
-        })
-      }
-
-      if (reservation.buyer) {
-        throw throwlhos.err_unprocessableEntity('A reserva já está em uso', { buyer: reservation.buyer })
-      }
-
-      if (reservation.price > balance) {
-        throw throwlhos.err_unprocessableEntity('Saldo insuficiente para a compra da reserva')
-      }
-
-      const reserveService = new ReserveService()
-
-      const reservationUpdated = await reserveService.reserve(
+      const reservationUpdated = await this.reserveService.reserve(
         id,
         buyer,
         reservation.owner.toString(),
@@ -200,34 +152,7 @@ export class ReservationController {
     try {
       const id = req.params.id
 
-      const reservation = await this.reservationRepository.findById(id)
-
-      if(!reservation){
-        throw throwlhos.err_notFound('Nenhuma reserva encontrada', {
-          id
-        })
-      }
-
-      if(!reservation.buyer){
-        throw throwlhos.err_unprocessableEntity('A reserva ainda não foi alugada', {
-          reservation
-        })
-      }
-
-      const today = new Date();
-
-      if(reservation.endDate && reservation.endDate > today){
-        throw throwlhos.err_unprocessableEntity('Não é possível encerrar uma reserva com finalização pendente', {
-          today,
-          endDate : reservation.endDate,
-        })
-      }
-
-      const unlinked = await this.reservationRepository.findOneAndUpdate(ObjectId(id), {
-        buyer : null,
-        startedDate : null,
-        endDate : null
-      })
+      const unlinked = await this.reservationService.unlink(id)
 
       res.send_ok('Reserva encerrada', {
         reservation : unlinked
@@ -241,11 +166,7 @@ export class ReservationController {
     try {
       const id = req.params.id as string
 
-      const deleted = await this.reservationRepository.deleteById(id)
-
-      if (!deleted) {
-        throw throwlhos.err_notFound('Reserva não encontrada', { deleted })
-      }
+      const deleted = await this.reservationService.remove(id)
 
       res.send_ok('Você excluiu sua reserva com sucesso', {
         reservation: deleted,

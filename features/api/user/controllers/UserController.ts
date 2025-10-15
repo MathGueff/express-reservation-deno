@@ -1,22 +1,22 @@
 import { NextFunction, Request, Response } from 'npm:express'
-import { UserRepository } from '../../../../models/User/UserRepository.ts'
 import { throwlhos } from '../../../../globals/Throwlhos.ts'
 import { ObjectId } from '../../../../globals/Mongo.ts'
 import { UserRules } from '../UserRules.ts'
 import { User } from '../../../../models/User/User.ts'
 import { QueryOptions } from 'mongoose'
 import { IUser } from '../../../../models/User/IUser.ts'
+import { UserService } from '../UserService.ts'
 
 export class UserController {
-  private userRepository: UserRepository
+  private userService: UserService
 
   private rules: UserRules
 
   constructor(
-    userRepository: UserRepository = new UserRepository(),
+    userService: UserService = new UserService(),
     rules = new UserRules(),
   ) {
-    this.userRepository = userRepository
+    this.userService = userService
     this.rules = rules
   }
 
@@ -33,7 +33,7 @@ export class UserController {
 
       const newUser = new User({ name, email, password, balance })
 
-      const created = await this.userRepository.createOne(newUser)
+      const created = await this.userService.create(newUser)
 
       return res.send_created('Usuário criado', {
         user: created,
@@ -61,17 +61,7 @@ export class UserController {
         balance,
       }
 
-      const updated = await this.userRepository.updateOne(
-        { _id: ObjectId(id) },
-        { $set: update },
-      )
-
-      if (!updated) {
-        throw throwlhos.err_notFound(
-          'Usuário não encontrado',
-          { id },
-        )
-      }
+      const updated = await this.userService.update(id, update)
 
       return res.send_ok('Usuário atualizado', {
         user: updated,
@@ -85,16 +75,7 @@ export class UserController {
     try {
       const id = req.params.id
 
-      const found = await this.userRepository.findOne({
-        _id: ObjectId(id),
-      })
-
-      if (!found) {
-        throw throwlhos.err_notFound(
-          'Usuário não encontrado',
-          { id },
-        )
-      }
+      const found = await this.userService.findById(id)
 
       return res.send_ok('Usuário encontrado', {
         user: found,
@@ -114,16 +95,7 @@ export class UserController {
         options = { limit, skip }
       }
 
-      const found = await this.userRepository.findMany({})
-        .skip(options?.skip ?? 0)
-        .limit(options?.limit ?? 10)
-
-      if (found.length === 0) {
-        throw throwlhos.err_notFound(
-          'Nenhum usuário encontrado',
-          { found },
-        )
-      }
+      const found = await this.userService.findAll(options)
 
       return res.send_ok('Usuários encontrados', {
         users: found,
@@ -137,16 +109,7 @@ export class UserController {
     try {
       const id = req.params.id
 
-      const excluded = await this.userRepository.deleteOne({
-        _id: ObjectId(id),
-      })
-
-      if (!excluded) {
-        throw throwlhos.err_notFound(
-          'Usuário não encontrado',
-          { id },
-        )
-      }
+      const excluded = await this.userService.remove(id)
 
       return res.send_ok('Usuário removido', {
         user: excluded,
