@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from 'npm:express'
-import { throwlhos } from '../../../../globals/Throwlhos.ts'
-import { ObjectId } from '../../../../globals/Mongo.ts'
 import { UserRules } from '../UserRules.ts'
 import { User } from '../../../../models/User/User.ts'
 import { QueryOptions } from 'mongoose'

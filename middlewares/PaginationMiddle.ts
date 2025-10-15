@@ -7,15 +7,27 @@ class PaginateRules extends BaseRules {
   constructor() {
     super()
 
-    this.rc.addRule('page', {
-      validator: is.number,
-      message: 'Valor para a página inválido! Deve ser um número.',
-    })
+    this.rc.addRules('page', [
+      {
+        validator: is.number,
+        message: 'Valor para a página inválido! Deve ser um número.',
+      },
+      {
+        validator: (page : number) => page >= 0,
+        message: 'O page deve ser maior ou igual zero'
+      }
+      
+    ])
 
-    this.rc.addRule('limit', {
-      validator: is.number,
-      message: 'Valor para o limite inválido! Deve ser um número.',
-    })
+    this.rc.addRules('limit', [
+      {
+        validator: is.number,
+        message: 'Valor para o limite inválido! Deve ser um número.',
+      },{
+        validator: (limit : number) => limit >= 0,
+        message: 'O limite deve ser maior ou igual zero'
+      }
+    ])
   }
 }
 

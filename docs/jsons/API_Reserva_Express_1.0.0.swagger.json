@@ -175,7 +175,7 @@
         }
       }
     },
-    "/api/auth/me": {
+    "/auth/me": {
       "get": {
         "summary": "Retorna informações do usuário autenticado",
         "tags": [

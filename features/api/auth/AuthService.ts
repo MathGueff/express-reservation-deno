@@ -1,19 +1,21 @@
-import fn from 'npm:fn-code'
 import { Env } from '../../../config/Env.ts'
 import { throwlhos } from '../../../globals/Throwlhos.ts'
-import { UserRepository } from '../../../models/User/UserRepository.ts'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
+import { AuthRepository } from '../../../models/Auth/AuthRepository.ts'
+import { ObjectId } from '../../../globals/Mongo.ts'
+import fn from 'fn-code'
+import { IUser } from '../../../models/User/IUser.ts'
 
 export class AuthService {
-  private userRepository: UserRepository
+  private authRepository: AuthRepository
 
-  constructor(userRepository = new UserRepository()) {
-    this.userRepository = userRepository
+  constructor(authRepository = new AuthRepository()) {
+    this.authRepository = authRepository
   }
 
   async login(email : string, password : string) {
-    const founded = await this.userRepository.findOne({ email })
+    const founded = await this.authRepository.findOne({ email })
 
     let checked = false;
 
@@ -30,5 +32,18 @@ export class AuthService {
 
     const token = jwt.sign({ id: founded.id }, Env.jwtSecret, { expiresIn: Env.authAccessTokenExpiration })
     return token
+  }
+
+  async changePassword(id : string, password : string){
+    const salt = await bcrypt.genSalt(10)
+    password = await bcrypt.hash(password, salt)
+
+    const update = this.authRepository.updateById(id, {password})
+
+    if(!update){
+      throw throwlhos.err_notFound('Nenhum usuário encontrado')
+    }
+
+    return update
   }
 }

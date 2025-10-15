@@ -8,7 +8,7 @@ const authController = new AuthController()
 
 /**
  * @openapi
- * /api/auth/me:
+ * /auth/me:
  *   get:
  *     summary: Retorna informações do usuário autenticado
  *     tags: [Auth]
@@ -74,6 +74,12 @@ AuthRouter.get(
 AuthRouter.post(
   '/auth',
   authController.login,
+)
+
+AuthRouter.patch(
+  '/auth/change-password/:id',
+  AuthMiddle,
+  authController.changePassword,
 )
 
 export { AuthRouter }

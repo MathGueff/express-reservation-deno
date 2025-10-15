@@ -45,4 +45,20 @@ export class AuthController {
       next(error)
     }
   }
+
+  changePassword = async(req:Request, res:Response, next : NextFunction) => {
+    try {
+      const id = req.user.id
+      const password = req.body.password;
+
+      this.rules.validate({id},{password})
+
+      const updated = await this.authService.changePassword(id, password)
+
+      res.send_ok('Senha alterada', {user : updated})
+
+    } catch (error) {
+      next(error)
+    }
+  }
 }
