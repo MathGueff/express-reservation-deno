@@ -1,9 +1,10 @@
 import is from '@zarco/isness'
+
 export class Env {
-  static get port(){
-    return Number(Deno.env.get('PORT') ?? "3000")
+  static get port() {
+    return Number(Deno.env.get('PORT') ?? '3000')
   }
-  
+
   static getDatabasePasswordByUsername(databaseUsername: string): string {
     if (!databaseUsername) throw Error('Please provide a database username!')
 
@@ -14,8 +15,11 @@ export class Env {
 
   /** AUTHENTICATION */
   static get jwtSecret() {
-    return Deno.env.get('JWT_SECRET') ??
-      'SDNuuJ3zhxLoZiYVXiBEq+X6H2SgIAnXE+ZIB7Fk5dk='
+    const token = Deno.env.get('JWT_SECRET')
+    if (!token) {
+      throw new Error('A variável de ambiente JWT deve estar definida')
+    }
+    return token
   }
 
   static get authAccessTokenExpiration() {

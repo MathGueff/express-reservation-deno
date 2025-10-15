@@ -8,27 +8,30 @@ import { QueryOptions } from 'mongoose'
 import { IUser } from '../../../../models/User/IUser.ts'
 
 export class UserController {
-  private userRepository: UserRepository;
+  private userRepository: UserRepository
 
-  private rules: UserRules;
+  private rules: UserRules
 
   constructor(
     userRepository: UserRepository = new UserRepository(),
-    rules = new UserRules()
+    rules = new UserRules(),
   ) {
-    this.userRepository = userRepository;
-    this.rules = rules;
+    this.userRepository = userRepository
+    this.rules = rules
   }
 
-  create = async (req :Request, res : Response, next : NextFunction) => {
+  create = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const {name, email, password, balance} = req.body
+      const { name, email, password, balance } = req.body
 
       this.rules.validate(
-        {name}, {email}, {password}, {balance, isRequiredField : false}
+        { name },
+        { email },
+        { password },
+        { balance, isRequiredField: false },
       )
-      
-      const newUser = new User({ name, email, password, balance})
+
+      const newUser = new User({ name, email, password, balance })
 
       const created = await this.userRepository.createOne(newUser)
 
@@ -44,39 +47,41 @@ export class UserController {
     try {
       const id = req.params.id
 
-      const {name, email, balance} = req.body;
+      const { name, email, balance } = req.body
 
       this.rules.validate(
-        {name, isRequiredField: false},
-        {email, isRequiredField: false},
-        {balance, isRequiredField: false}
+        { name, isRequiredField: false },
+        { email, isRequiredField: false },
+        { balance, isRequiredField: false },
       )
 
-      const update : Partial<IUser> = {
-        email, name, balance        
+      const update: Partial<IUser> = {
+        email,
+        name,
+        balance,
       }
-      
+
       const updated = await this.userRepository.updateOne(
-        {_id: ObjectId(id)},
-        { $set: update }
+        { _id: ObjectId(id) },
+        { $set: update },
       )
 
       if (!updated) {
         throw throwlhos.err_notFound(
-          "Usuário não encontrado",
+          'Usuário não encontrado',
           { id },
         )
       }
 
       return res.send_ok('Usuário atualizado com sucesso', {
-        user: updated
+        user: updated,
       })
     } catch (error) {
       next(error)
     }
   }
 
-  findById = async (req : Request, res : Response, next : NextFunction) => {
+  findById = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id
 
@@ -86,29 +91,27 @@ export class UserController {
 
       if (!found) {
         throw throwlhos.err_notFound(
-          "Usuário não encontrado",
+          'Usuário não encontrado',
           { id },
         )
       }
 
       return res.send_ok('Usuário encontrado com sucesso', {
-        user : found
+        user: found,
       })
-
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 
-  findAll = async (req : Request, res : Response, next : NextFunction) => {
+  findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      let options: QueryOptions = {}
 
-      let options : QueryOptions = {};
-
-      if(req.pagination){
-        const limit = req.pagination.limit;
-        const skip = req.pagination.page * limit - limit;
-        options = {limit, skip}
+      if (req.pagination) {
+        const limit = req.pagination.limit
+        const skip = req.pagination.page * limit - limit
+        options = { limit, skip }
       }
 
       const found = await this.userRepository.findMany({})
@@ -117,20 +120,20 @@ export class UserController {
 
       if (found.length === 0) {
         throw throwlhos.err_notFound(
-          "Nenhum usuário encontrado",
-          {found}
+          'Nenhum usuário encontrado',
+          { found },
         )
       }
 
       return res.send_ok('Usuários encontrados com sucesso', {
-        users : found
+        users: found,
       })
     } catch (error) {
-      next(error);
+      next(error)
     }
   }
 
-  delete = async (req : Request, res : Response, next : NextFunction) => {
+  delete = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id
 
@@ -140,7 +143,7 @@ export class UserController {
 
       if (!excluded) {
         throw throwlhos.err_notFound(
-          "Usuário não encontrado",
+          'Usuário não encontrado',
           { id },
         )
       }

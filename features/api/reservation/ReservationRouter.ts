@@ -5,7 +5,7 @@ import { AuthMiddle } from '../../../middlewares/AuthMiddle.ts'
 
 const ReservationRouter = Router()
 
-const reservationController = new ReservationController();
+const reservationController = new ReservationController()
 
 /**
  * @openapi
@@ -51,12 +51,11 @@ const reservationController = new ReservationController();
  *         description: Parâmetros inválidos
  */
 ReservationRouter.get(
-    '/reservations',
-    AuthMiddle,
-    PaginationMiddle({maxLimit : 10}),
-    reservationController.findAll
+  '/reservations',
+  AuthMiddle,
+  PaginationMiddle({ maxLimit: 10 }),
+  reservationController.findAll,
 )
-
 
 /**
  * @openapi
@@ -71,11 +70,10 @@ ReservationRouter.get(
  *         description: reserva não encontrada
  */
 ReservationRouter.get(
-    '/reservations/my',
-    AuthMiddle,
-    reservationController.findMyReservations
+  '/reservations/my',
+  AuthMiddle,
+  reservationController.findMyReservations,
 )
-
 
 /**
  * @openapi
@@ -96,10 +94,10 @@ ReservationRouter.get(
  *         description: reserva não encontrada
  */
 ReservationRouter.get(
-    '/reservations/:id',
-    AuthMiddle,
-    PaginationMiddle(),
-    reservationController.findById
+  '/reservations/:id',
+  AuthMiddle,
+  PaginationMiddle(),
+  reservationController.findById,
 )
 
 /**
@@ -126,9 +124,9 @@ ReservationRouter.get(
  *         description: Reserva criada
  */
 ReservationRouter.post(
-    '/reservations',
-    AuthMiddle,
-    reservationController.create
+  '/reservations',
+  AuthMiddle,
+  reservationController.create,
 )
 
 /**
@@ -152,9 +150,9 @@ ReservationRouter.post(
  *         description: Reserva não encontrada
  */
 ReservationRouter.post(
-    '/reservations/reserve/:id',
-    AuthMiddle,
-    reservationController.reserve
+  '/reservations/reserve/:id',
+  AuthMiddle,
+  reservationController.reserve,
 )
 
 /**
@@ -176,9 +174,9 @@ ReservationRouter.post(
  *         description: Reserva não encontrada
  */
 ReservationRouter.delete(
-    '/reservations/:id',
-    AuthMiddle,
-    reservationController.remove
+  '/reservations/:id',
+  AuthMiddle,
+  reservationController.remove,
 )
 
-export {ReservationRouter}
+export { ReservationRouter }

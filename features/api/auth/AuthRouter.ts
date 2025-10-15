@@ -1,10 +1,10 @@
-import {Router} from 'express'
+import { Router } from 'express'
 import { AuthController } from './controllers/AuthController.ts'
 import { AuthMiddle } from '../../../middlewares/AuthMiddle.ts'
 
-const AuthRouter = Router();
+const AuthRouter = Router()
 
-const authController = new AuthController();
+const authController = new AuthController()
 
 /**
  * @openapi
@@ -21,9 +21,9 @@ const authController = new AuthController();
  *         description: Token inválido ou ausente
  */
 AuthRouter.get(
-    '/auth/me',
-    AuthMiddle,
-    authController.me
+  '/auth/me',
+  AuthMiddle,
+  authController.me,
 )
 
 /**
@@ -70,11 +70,10 @@ AuthRouter.get(
  *                   description: Token JWT para autenticação
  *       401:
  *         description: Credenciais inválidas
- *
  */
 AuthRouter.post(
-    '/auth',
-    authController.login
+  '/auth',
+  authController.login,
 )
 
-export {AuthRouter}
+export { AuthRouter }

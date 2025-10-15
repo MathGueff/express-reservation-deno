@@ -1,7 +1,7 @@
 import { Database, IDatabaseConnection } from '../Database.ts'
 
-const databaseConfiguration : IDatabaseConnection = {
-   hostname: 'cluster0.zkpwmvs.mongodb.net',
+const databaseConfiguration: IDatabaseConnection = {
+  hostname: 'cluster0.zkpwmvs.mongodb.net',
   database: 'express-reservations',
   username: 'test',
 }

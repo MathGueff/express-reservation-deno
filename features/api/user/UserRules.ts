@@ -11,14 +11,14 @@ export class UserRules extends BaseRules {
     })
 
     this.rc.addRules('name', [
-        {
-            validator : is.string,
-            message : 'O nome deve ser uma string'
-        },
-        {
-            validator : (name : string) => name.length >= 3,
-            message : 'O nome é muito curto, informe pelo menos 3 caracteres'
-        },
+      {
+        validator: is.string,
+        message: 'O nome deve ser uma string',
+      },
+      {
+        validator: (name: string) => name.length >= 3,
+        message: 'O nome é muito curto, informe pelo menos 3 caracteres',
+      },
     ])
 
     this.rc.addRules('email', [

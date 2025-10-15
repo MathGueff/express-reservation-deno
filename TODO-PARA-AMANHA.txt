@@ -1,9 +1,9 @@
 Utilizar pacote responser para padronizacao das respostas
-Utilizar request-check e rules para validação
-Aplicar conceito de transações
+Utilizar request-check e rules para validação (ok)
+Aplicar conceito de transações 
 Exibição do protótipo _v0 do documento
 Como foi feita essa token e o que contém nela
-Uso de camelCase no projeto
+Uso de camelCase no projeto 
 Nome dos arquivos user-repository fora do padrão sempre usar o exportado
 Uso de de Indentação 2 espaços
 Leitura da documentação back-end

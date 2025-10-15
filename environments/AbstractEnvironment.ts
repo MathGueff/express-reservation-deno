@@ -2,11 +2,11 @@ import express, { Express } from 'npm:express'
 import cors from 'npm:cors'
 import helmet from 'npm:helmet'
 import responser from 'responser'
-import { printMiddle } from '../middlewares/PrintMiddle.ts'
+import morgan from 'morgan'
 
 export abstract class AbstractEnvironment {
   public port: number
-  
+
   constructor(port: number) {
     this.port = port
   }
@@ -24,14 +24,15 @@ export abstract class AbstractEnvironment {
 
     server.use(express.static('public'))
 
-    server.use(printMiddle);
+    server.use(morgan(':method :url | StatusCode :status | :res[content-length]'))
+    // server.use(printMiddle);
   }
 
   protected listen(server: Express): void {
     server.listen(this.port, () => this.listening(this.port))
   }
 
-  protected listening(port : number){
+  protected listening(port: number) {
     console.log(`Servidor iniciado na porta ${port}`)
   }
 }

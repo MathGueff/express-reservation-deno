@@ -10,7 +10,7 @@ import express from 'npm:express'
 
 export class ApiEnvironment extends AbstractEnvironment {
   constructor() {
-    const port = Env.port;
+    const port = Env.port
     super(port)
   }
 
@@ -25,7 +25,7 @@ export class ApiEnvironment extends AbstractEnvironment {
     apiServer.use(UserRouter)
     apiServer.use(ReservationRouter)
 
-    const r = new Responserror
+    const r = new Responserror()
     apiServer.use(r.errorHandler)
 
     this.listen(apiServer)

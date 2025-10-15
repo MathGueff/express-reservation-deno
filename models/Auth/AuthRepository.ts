@@ -7,8 +7,8 @@ class AuthRepository extends BaseRepository<IUser> {
   constructor(
     model = ExpressReservationDB.model<IUser>(
       'User',
-      UserSchema
-  ),
+      UserSchema,
+    ),
   ) {
     super(model)
   }

@@ -24,7 +24,7 @@ class UserSchemaClass extends BaseSchema {
         type: String,
         required: true,
         unique: true,
-        minlength: 3
+        minlength: 3,
       },
       email: {
         type: String,
@@ -41,8 +41,10 @@ class UserSchemaClass extends BaseSchema {
         type: Number,
         required: true,
         min: 0,
-        default: 0
+        default: 0,
       },
+    }, {
+      versionKey: false,
     })
   }
 }
@@ -50,11 +52,11 @@ class UserSchemaClass extends BaseSchema {
 const UserSchema = new UserSchemaClass().schema
 
 UserSchema.pre('save', async function save(next) {
-  if (!this.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  return next();
-});
+  if (!this.isModified('password')) return next()
+  const salt = await bcrypt.genSalt(10)
+  this.password = await bcrypt.hash(this.password, salt)
+  return next()
+})
 
 UserSchema.loadClass(User)
 

@@ -8,34 +8,34 @@ export class AuthRules extends BaseRules {
     this.rc.addRules('id', [
       {
         validator: is.objectId,
-        message: 'O id deve ser válido'
+        message: 'O id deve ser válido',
       },
       {
         validator: is.objectId,
-        message: 'O id deve ser válido'
-      }
+        message: 'O id deve ser válido',
+      },
     ])
-    
+
     this.rc.addRules('email', [
       {
-        validator : is.string,
-        message : 'O email deve ter um valor válido'
+        validator: is.string,
+        message: 'O email deve ter um valor válido',
       },
       {
-        validator : (email : string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
-        message : 'Formato de email inválido'
-      }
+        validator: (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email),
+        message: 'Formato de email inválido',
+      },
     ])
 
     this.rc.addRules('password', [
       {
-        validator : is.string,
-        message : 'A senha deve ser uma string'
+        validator: is.string,
+        message: 'A senha deve ser uma string',
       },
       {
-        validator : (password : string) => password.length >= 6,
-        message : 'A senha deve conter pelo menos 6 caracteres'
-      }
+        validator: (password: string) => password.length >= 6,
+        message: 'A senha deve conter pelo menos 6 caracteres',
+      },
     ])
   }
 }

@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import { Router } from 'express'
 import { AuthMiddle } from '../../../middlewares/AuthMiddle.ts'
 import { UserController } from './controllers/UserController.ts'
 import { PaginationMiddle } from '../../../middlewares/PaginationMiddle.ts'
 
-const UserRouter = Router();
+const UserRouter = Router()
 
-const userController = new UserController();
+const userController = new UserController()
 /**
  * @openapi
  * components:
@@ -50,10 +50,10 @@ const userController = new UserController();
  *         description: Parâmetros inválidos
  */
 UserRouter.get(
-    '/users/',
-    AuthMiddle,
-    PaginationMiddle({maxLimit : 10}),
-    userController.findAll
+  '/users/',
+  AuthMiddle,
+  PaginationMiddle({ maxLimit: 10 }),
+  userController.findAll,
 )
 
 /**
@@ -75,9 +75,9 @@ UserRouter.get(
  *         description: Usuário não encontrado
  */
 UserRouter.get(
-    '/users/:id',
-    AuthMiddle,
-    userController.findById
+  '/users/:id',
+  AuthMiddle,
+  userController.findById,
 )
 
 /**
@@ -106,8 +106,8 @@ UserRouter.get(
  *         description: Usuário criado
  */
 UserRouter.post(
-    '/users',
-    userController.create
+  '/users',
+  userController.create,
 )
 
 /**
@@ -129,9 +129,9 @@ UserRouter.post(
  *         description: Usuário não encontrado
  */
 UserRouter.put(
-    '/users/:id',
-    AuthMiddle,
-    userController.update
+  '/users/:id',
+  AuthMiddle,
+  userController.update,
 )
 
 /**
@@ -153,9 +153,9 @@ UserRouter.put(
  *         description: Usuário não encontrado
  */
 UserRouter.delete(
-    '/users/:id',
-    AuthMiddle,
-    userController.delete
+  '/users/:id',
+  AuthMiddle,
+  userController.delete,
 )
 
-export {UserRouter}
+export { UserRouter }
