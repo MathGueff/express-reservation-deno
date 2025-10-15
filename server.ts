@@ -1,6 +1,6 @@
 import { ApiEnvironment } from './environments/ApiEnvironment.ts'
 
-async function server() {
+function server() {
   const api = new ApiEnvironment()
   api.run()
 }

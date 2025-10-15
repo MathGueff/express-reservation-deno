@@ -132,7 +132,7 @@ ReservationRouter.post(
 /**
  * @openapi
  * /reservations/reserve/{id}:
- *   put:
+ *   post:
  *     summary: Faz a reserva para um usuário
  *     tags: [Reservation]
  *     parameters:
@@ -153,6 +153,58 @@ ReservationRouter.post(
   '/reservations/reserve/:id',
   AuthMiddle,
   reservationController.reserve,
+)
+
+/**
+ * @openapi
+ * /reservations/unlink/{id}:
+ *   post:
+ *     summary: Encerra a reserva de um usuário
+ *     tags: [Reservation]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Reserva realizada
+ *       400:
+ *         description: Reserva já existente
+ *       404:
+ *         description: Reserva não encontrada
+ */
+ReservationRouter.post(
+  '/reservations/unlink/:id',
+  AuthMiddle,
+  reservationController.unlink,
+)
+
+/**
+ * @openapi
+ * /reservations/{id}:
+ *   put:
+ *     summary: Atualiza a reserva
+ *     tags: [Reservation]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Reserva realizada
+ *       400:
+ *         description: Reserva já existente
+ *       404:
+ *         description: Reserva não encontrada
+ */
+ReservationRouter.put(
+  '/reservations/:id',
+  AuthMiddle,
+  reservationController.update,
 )
 
 /**
