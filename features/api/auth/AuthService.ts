@@ -3,9 +3,6 @@ import { throwlhos } from '../../../globals/Throwlhos.ts'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { AuthRepository } from '../../../models/Auth/AuthRepository.ts'
-import { ObjectId } from '../../../globals/Mongo.ts'
-import fn from 'fn-code'
-import { IUser } from '../../../models/User/IUser.ts'
 
 export class AuthService {
   private authRepository: AuthRepository
