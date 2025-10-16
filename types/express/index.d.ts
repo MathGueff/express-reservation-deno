@@ -1,12 +1,13 @@
 import { IPaginationMiddle } from '../../middlewares/PaginationMiddle.ts'
-import { IRequestUser } from '../../models/User/IUser.ts'
+import { IUser } from '../../models/User/IUser.ts'
 
 declare global {
   namespace Express {
     interface Request {
-      user : IRequestUser
+      user : Partial<IUser>
       pagination : IPaginationMiddle.output
       userId : string
+      reservationId : string
     }
   }
 }

@@ -1,10 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { throwlhos } from '../globals/Throwlhos.ts'
-import { UserRepository } from '../models/User/UserRepository.ts'
 import jwt from 'jsonwebtoken'
 import { Env } from '../config/Env.ts'
 
-export const AuthMiddle = async (req: Request, _res: Response, next: NextFunction) => {
+export const AuthMiddle = (req: Request, _res: Response, next: NextFunction) => {
   try {
     const auth = req.headers.authorization
 
@@ -21,10 +20,7 @@ export const AuthMiddle = async (req: Request, _res: Response, next: NextFunctio
       return decoded
     })
 
-    const userRepository = new UserRepository()
-
-    const authenticated = await userRepository.findById(verified.id)
-    req.user = authenticated
+    req.userId = verified.id
     return next()
   } catch (error) {
     return next(error)

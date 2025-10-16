@@ -18,7 +18,7 @@ export class AuthController {
 
   me = (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = req.user
+      const user = req.userId
       if (!user) {
         throw throwlhos.err_unauthorized('É necessário um token válido', { user })
       }
@@ -48,7 +48,7 @@ export class AuthController {
 
   changePassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.user.id
+      const id = req.userId
       const password = req.body.password
 
       this.rules.validate({ id }, { password })

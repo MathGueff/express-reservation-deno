@@ -34,7 +34,7 @@ export class ReservationController {
 
       const reservations = await this.reservationService.findAll(options)
 
-      res.send_ok('Reservas encontradas', {
+      return res.send_ok('Reservas encontradas', {
         reservations,
       })
     } catch (error) {
@@ -48,7 +48,7 @@ export class ReservationController {
 
       const reservation = await this.reservationService.findById(id)
 
-      res.send_ok('Reserva encontrada', {
+      return res.send_ok('Reserva encontrada', {
         reservation,
       })
     } catch (error) {
@@ -62,7 +62,7 @@ export class ReservationController {
 
       const reservations = await this.reservationService.findMyReservations(id)
 
-      res.send_ok('Suas reservas foram encontradas', {
+      return res.send_ok('Suas reservas foram encontradas', {
         reservations,
       })
     } catch (error) {
@@ -85,7 +85,7 @@ export class ReservationController {
       })
 
       const created = await this.reservationService.create(newReservation)
-      res.send_created('Reserva criada', {
+      return res.send_created('Reserva criada', {
         reservation: created,
       })
     } catch (error) {
@@ -108,7 +108,7 @@ export class ReservationController {
 
       const reservation = await this.reservationService.update(id, update)
 
-      res.send_ok('Reserva atualizada', {
+      return res.send_ok('Reserva atualizada', {
         reservation,
       })
     } catch (error) {
@@ -119,15 +119,13 @@ export class ReservationController {
   reserve = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.reservationId
-      const { balance } = req.user
       const buyer = req.userId
 
       this.rules.validate(
-        { buyer },
-        { balance },
+        { buyer }
       )
 
-      const reservation = await this.reservationService.reserve(id, buyer, balance)
+      const reservation = await this.reservationService.reserve(id, buyer)
 
       const reserved = await this.reserveService.reserve(
         id,
@@ -144,7 +142,7 @@ export class ReservationController {
       reserved.endDate = new Date(new Date().setDate(new Date().getDate() + reserved.daysOfDuration))
 
       reserved.save()
-      res.send_ok('Reservado com sucesso', { reservation: reserved })
+      return res.send_ok('Reservado com sucesso', { reservation: reserved })
     } catch (error) {
       next(error)
     }
@@ -156,7 +154,7 @@ export class ReservationController {
 
       const unlinked = await this.reservationService.unlink(id)
 
-      res.send_ok('Reserva encerrada', {
+      return res.send_ok('Reserva encerrada', {
         reservation: unlinked,
       })
     } catch (error) {
@@ -170,7 +168,7 @@ export class ReservationController {
 
       const deleted = await this.reservationService.remove(id)
 
-      res.send_ok('Você excluiu sua reserva com sucesso', {
+      return res.send_ok('Você excluiu sua reserva com sucesso', {
         reservation: deleted,
       })
     } catch (error) {

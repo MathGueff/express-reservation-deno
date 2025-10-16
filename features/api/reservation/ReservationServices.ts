@@ -3,6 +3,7 @@ import { ReservationRepository } from '../../../models/Reservation/ReservationRe
 import { throwlhos } from '../../../globals/Throwlhos.ts'
 import { IReservation } from '../../../models/Reservation/IReservation.ts'
 import { ObjectId } from '../../../globals/Mongo.ts'
+import { UserRepository } from '../../../models/User/UserRepository.ts'
 
 export class ReservationService {
   private reservationRepository: ReservationRepository
@@ -14,8 +15,8 @@ export class ReservationService {
 
   async findAll(options: QueryOptions) {
     const reservations = await this.reservationRepository.findMany({})
-      .skip(options?.skip ?? 0)
-      .limit(options?.limit ?? 10)
+      // .skip(options?.skip ?? 0)
+      // .limit(options?.limit ?? 10)
 
     if (reservations.length === 0) {
       throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservations })
@@ -53,8 +54,13 @@ export class ReservationService {
     return await this.reservationRepository.create(newReservation)
   }
 
-  async reserve(id: string, buyer: string, balance: number) {
+  async reserve(id: string, buyer: string) {
     const reservation = await this.reservationRepository.findById(id)
+    const user = await new UserRepository().findById(id)
+    
+    if(!user){
+      throw throwlhos.err_notFound('Comprador não identificado', {user})
+    }
 
     if (!reservation) {
       throw throwlhos.err_notFound('Reserva não encontrada', { reservation })
@@ -71,7 +77,7 @@ export class ReservationService {
       throw throwlhos.err_unprocessableEntity('A reserva já está em uso', { buyer: reservation.buyer })
     }
 
-    if (reservation.price > balance) {
+    if (reservation.price > user.balance) {
       throw throwlhos.err_unprocessableEntity('Saldo insuficiente para a compra da reserva')
     }
 

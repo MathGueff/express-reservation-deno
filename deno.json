@@ -1,8 +1,9 @@
 {
   "$schema": "https://deno.land/x/deno/cli/schemas/config-file.v1.json",
+  "nodeModulesDir": "auto",
   "tasks": {
     "dev": "deno run --watch -A --env server.ts",
-    "test": "deno test -A",
+    "test": "deno test -A --no-check --env",
     "scripts": "deno run -A scripts.ts"
   },
   "imports": {
