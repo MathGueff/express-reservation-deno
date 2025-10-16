@@ -127,22 +127,22 @@ export class ReservationController {
 
       const reservation = await this.reservationService.reserve(id, buyer, balance)
 
-      const reservationUpdated = await this.reserveService.reserve(
+      const reserved = await this.reserveService.reserve(
         id,
         buyer,
         reservation.owner.toString(),
         reservation.price
       )
 
-      if(!reservationUpdated) {
-        throw throwlhos.err_internalServerError('Ocorreu um erro ao realizar a reserva', {reservation : reservationUpdated})
+      if(!reserved) {
+        throw throwlhos.err_notFound('Não foi possível realizar a reserva', {reservation : reserved})
       }
 
-      reservationUpdated.startedDate = new Date()
-      reservationUpdated.endDate = new Date(new Date().setDate(new Date().getDate() + reservationUpdated.daysOfDuration))
+      reserved.startedDate = new Date()
+      reserved.endDate = new Date(new Date().setDate(new Date().getDate() + reserved.daysOfDuration))
 
-      reservationUpdated.save();
-      res.send_ok('Reservado com sucesso', { reservation: reservationUpdated })
+      reserved.save();
+      res.send_ok('Reservado com sucesso', { reservation: reserved })
     } catch (error) {
       next(error)
     } 
