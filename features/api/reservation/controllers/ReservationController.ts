@@ -9,7 +9,7 @@ import { ReservationService } from '../ReservationServices.ts'
 
 export class ReservationController {
   private reservationService: ReservationService
-  private reserveService: ReserveService 
+  private reserveService: ReserveService
   private rules: ReservationRules
 
   constructor(
@@ -32,8 +32,8 @@ export class ReservationController {
         options = { limit, skip }
       }
 
-      const reservations = await this.reservationService.findAll(options);
-      
+      const reservations = await this.reservationService.findAll(options)
+
       res.send_ok('Reservas encontradas', {
         reservations,
       })
@@ -46,7 +46,7 @@ export class ReservationController {
     try {
       const id = req.params.reservationId
 
-     const reservation = await this.reservationService.findById(id);
+      const reservation = await this.reservationService.findById(id)
 
       res.send_ok('Reserva encontrada', {
         reservation,
@@ -84,7 +84,7 @@ export class ReservationController {
         daysOfDuration,
       })
 
-      const created = await this.reservationService.create(newReservation);
+      const created = await this.reservationService.create(newReservation)
       res.send_created('Reserva criada', {
         reservation: created,
       })
@@ -93,23 +93,24 @@ export class ReservationController {
     }
   }
 
-  update = async (req :Request, res : Response, next : NextFunction) => {
+  update = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.reservationId
-      const {price, name, daysOfDuration} = req.body
+      const { price, name, daysOfDuration } = req.body
 
-      this.rules.validate({name, isRequiredField : false}, {price, isRequiredField : false}, {daysOfDuration, isRequiredField : false})
+      this.rules.validate({ name, isRequiredField: false }, { price, isRequiredField: false }, { daysOfDuration, isRequiredField: false })
 
-      const update : Partial<Reservation> = {
-        name, price, daysOfDuration
+      const update: Partial<Reservation> = {
+        name,
+        price,
+        daysOfDuration,
       }
 
-     const reservation = await this.reservationService.update(id, update)
+      const reservation = await this.reservationService.update(id, update)
 
       res.send_ok('Reserva atualizada', {
-        reservation
+        reservation,
       })
-
     } catch (error) {
       next(error)
     }
@@ -131,31 +132,31 @@ export class ReservationController {
         id,
         buyer,
         reservation.owner.toString(),
-        reservation.price
+        reservation.price,
       )
 
-      if(!reserved) {
-        throw throwlhos.err_notFound('Não foi possível realizar a reserva', {reservation : reserved})
+      if (!reserved) {
+        throw throwlhos.err_notFound('Não foi possível realizar a reserva', { reservation: reserved })
       }
 
       reserved.startedDate = new Date()
       reserved.endDate = new Date(new Date().setDate(new Date().getDate() + reserved.daysOfDuration))
 
-      reserved.save();
+      reserved.save()
       res.send_ok('Reservado com sucesso', { reservation: reserved })
     } catch (error) {
       next(error)
-    } 
+    }
   }
 
-  unlink = async(req:Request, res : Response, next : NextFunction) => {
+  unlink = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.id
 
       const unlinked = await this.reservationService.unlink(id)
 
       res.send_ok('Reserva encerrada', {
-        reservation : unlinked
+        reservation: unlinked,
       })
     } catch (error) {
       next(error)

@@ -49,7 +49,7 @@ export class UserRules extends BaseRules {
         message: 'O saldo deve ser um número',
       },
       {
-        validator: (balance : number) => balance >= 0,
+        validator: (balance: number) => balance >= 0,
         message: 'O saldo não pode ser negativo',
       },
     ])

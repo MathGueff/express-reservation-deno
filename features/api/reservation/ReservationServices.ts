@@ -121,7 +121,7 @@ export class ReservationService {
       throw throwlhos.err_unprocessableEntity('Não é possível alterar a reserva enquanto estiver em uso')
     }
 
-   await this.reservationRepository.updateById(id, update)
+    await this.reservationRepository.updateById(id, update)
 
     return await this.reservationRepository.findById(id)
   }
@@ -131,7 +131,7 @@ export class ReservationService {
     console.log(deleted)
 
     if (!deleted) {
-      throw throwlhos.err_notFound('Reserva não encontrada', { reservation : deleted })
+      throw throwlhos.err_notFound('Reserva não encontrada', { reservation: deleted })
     }
 
     return deleted

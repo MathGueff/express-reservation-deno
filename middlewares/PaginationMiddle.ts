@@ -13,20 +13,20 @@ class PaginateRules extends BaseRules {
         message: 'Valor para a página inválido! Deve ser um número.',
       },
       {
-        validator: (page : number) => page >= 0,
-        message: 'O page deve ser maior ou igual zero'
-      }
-      
+        validator: (page: number) => page >= 0,
+        message: 'O page deve ser maior ou igual zero',
+      },
     ])
 
     this.rc.addRules('limit', [
       {
         validator: is.number,
         message: 'Valor para o limite inválido! Deve ser um número.',
-      },{
-        validator: (limit : number) => limit >= 0,
-        message: 'O limite deve ser maior ou igual zero'
-      }
+      },
+      {
+        validator: (limit: number) => limit >= 0,
+        message: 'O limite deve ser maior ou igual zero',
+      },
     ])
   }
 }

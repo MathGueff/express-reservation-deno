@@ -14,13 +14,12 @@ export const AuthMiddle = async (req: Request, _res: Response, next: NextFunctio
 
     const [, token] = auth.split(' ')
 
-    const verified = jwt.verify(token, Env.jwtSecret, (err : unknown, decoded : string) => {
-      if(err){
-        throw throwlhos.err_unauthorized('Token inválido', { err, decoded, sentHeaders : req.headers}) 
+    const verified = jwt.verify(token, Env.jwtSecret, (err: unknown, decoded: string) => {
+      if (err) {
+        throw throwlhos.err_unauthorized('Token inválido', { err, decoded, sentHeaders: req.headers })
       }
       return decoded
     })
-
 
     const userRepository = new UserRepository()
 

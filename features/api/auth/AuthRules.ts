@@ -9,7 +9,7 @@ export class AuthRules extends BaseRules {
       {
         validator: is.objectId,
         message: 'O id deve ser válido',
-      }
+      },
     ])
 
     this.rc.addRules('email', [

@@ -11,13 +11,13 @@ export class AuthService {
     this.authRepository = authRepository
   }
 
-  async login(email : string, password : string) {
+  async login(email: string, password: string) {
     const founded = await this.authRepository.findOne({ email })
 
-    let checked = false;
+    let checked = false
 
-    if(founded){
-      checked = await bcrypt.compare(password, founded?.password);
+    if (founded) {
+      checked = await bcrypt.compare(password, founded?.password)
     }
 
     if (!founded || !checked) {
@@ -31,13 +31,13 @@ export class AuthService {
     return token
   }
 
-  async changePassword(id : string, password : string){
+  async changePassword(id: string, password: string) {
     const salt = await bcrypt.genSalt(10)
     password = await bcrypt.hash(password, salt)
 
-    const update = this.authRepository.updateById(id, {password})
+    const update = this.authRepository.updateById(id, { password })
 
-    if(!update){
+    if (!update) {
       throw throwlhos.err_notFound('Nenhum usuário encontrado')
     }
 

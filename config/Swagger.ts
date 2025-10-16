@@ -6,4 +6,4 @@
  *       type: http
  *       in: bearer
  *       bearerFormat: JWT
-*/
+ */

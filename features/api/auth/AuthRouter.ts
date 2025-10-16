@@ -16,7 +16,7 @@ const authController = new AuthController()
  *     tags: [Auth]
  *     responses:
  *       200:
- *         description: Informações da sua conta recuperadas com sucesso 
+ *         description: Informações da sua conta recuperadas com sucesso
  *         content:
  *           application/json:
  *             schema:

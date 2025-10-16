@@ -36,8 +36,8 @@ export class AuthController {
 
       this.rules.validate({ email }, { password })
 
-      const token = await this.authService.login(email, password);
-      
+      const token = await this.authService.login(email, password)
+
       return res.send_ok('Login realizado com sucesso', {
         token,
       })
@@ -46,17 +46,16 @@ export class AuthController {
     }
   }
 
-  changePassword = async(req:Request, res:Response, next : NextFunction) => {
+  changePassword = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.user.id
-      const password = req.body.password;
+      const password = req.body.password
 
-      this.rules.validate({id},{password})
+      this.rules.validate({ id }, { password })
 
       const updated = await this.authService.changePassword(id, password)
 
-      res.send_ok('Senha alterada', {user : updated})
-
+      res.send_ok('Senha alterada', { user: updated })
     } catch (error) {
       next(error)
     }

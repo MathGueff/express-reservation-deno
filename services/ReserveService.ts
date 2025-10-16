@@ -22,12 +22,12 @@ class ReserveService {
       await session.commitTransaction()
 
       const reservationUpdated = await this.reservationRepository.findById(id)
-      return reservationUpdated;
+      return reservationUpdated
     } catch (error) {
       await session.abortTransaction()
       throw error
     } finally {
-      await session.endSession();
+      await session.endSession()
     }
   }
 }
