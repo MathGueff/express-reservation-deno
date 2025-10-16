@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'npm:express'
-import { throwlhos } from '../../../../globals/Throwlhos.ts'
-import { AuthRules } from '../AuthRules.ts'
-import { AuthService } from '../AuthService.ts'
+import { throwlhos } from '../../../globals/Throwlhos.ts'
+import { AuthRules } from './AuthRules.ts'
+import { AuthService } from './AuthService.ts'
 
 export class AuthController {
   private authService: AuthService

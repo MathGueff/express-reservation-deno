@@ -1,22 +1,22 @@
 import { NextFunction, Request, Response } from 'express'
-import { ReservationRules } from '../ReservationRules.ts'
-import { throwlhos } from '../../../../globals/Throwlhos.ts'
+import { ReservationRules } from './ReservationRules.ts'
+import { throwlhos } from '../../../globals/Throwlhos.ts'
 import { QueryOptions } from 'mongoose'
-import { Reservation } from '../../../../models/Reservation/Reservation.ts'
-import { ObjectId } from '../../../../globals/Mongo.ts'
-import { ReserveService } from '../../../../services/ReserveService.ts'
-import { ReservationService } from '../ReservationServices.ts'
+import { Reservation } from '../../../models/Reservation/Reservation.ts'
+import { ObjectId } from '../../../globals/Mongo.ts'
+import { ReserveService } from '../../../services/ReserveService.ts'
+import { ReservationService } from './ReservationServices.ts'
 
 export class ReservationController {
   private reservationService: ReservationService
   private reserveService: ReserveService
   private rules: ReservationRules
 
-  constructor(
-    reservationService: ReservationService = new ReservationService(),
-    reserveService: ReserveService = new ReserveService(),
+  constructor({
+    reservationService = new ReservationService(),
+    reserveService = new ReserveService(),
     rules = new ReservationRules(),
-  ) {
+  } = {}) {
     this.reservationService = reservationService
     this.reserveService = reserveService
     this.rules = rules
@@ -58,7 +58,7 @@ export class ReservationController {
 
   findMyReservations = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.user.id
+      const id = req.userId
 
       const reservations = await this.reservationService.findMyReservations(id)
 
@@ -73,7 +73,7 @@ export class ReservationController {
   create = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { name, price, daysOfDuration } = req.body
-      const ownerId = req.user.id
+      const ownerId = req.userId
 
       this.rules.validate({ name }, { price }, { daysOfDuration }, { ownerId })
 
@@ -119,7 +119,8 @@ export class ReservationController {
   reserve = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.params.reservationId
-      const { id: buyer, balance } = req.user
+      const { balance } = req.user
+      const buyer = req.userId
 
       this.rules.validate(
         { buyer },

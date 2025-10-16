@@ -7,8 +7,9 @@ import { ObjectId } from '../../../globals/Mongo.ts'
 export class ReservationService {
   private reservationRepository: ReservationRepository
 
-  constructor() {
-    this.reservationRepository = new ReservationRepository()
+  constructor({reservationRepository = new ReservationRepository()} = {}) 
+  {
+    this.reservationRepository = reservationRepository
   }
 
   async findAll(options: QueryOptions) {

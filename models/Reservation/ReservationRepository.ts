@@ -1,11 +1,11 @@
 import { BaseRepository } from '../../base/BaseRepository.ts'
 import { ExpressReservationDB } from '../../database/db/ExpressReservationDB.ts'
-import { Reservation } from './Reservation.ts'
+import { IReservation } from './IReservation.ts'
 import { ReservationSchema } from './Reservation.ts'
 
-class ReservationRepository extends BaseRepository<Reservation> {
+class ReservationRepository extends BaseRepository<IReservation> {
   constructor(
-    model = ExpressReservationDB.model<Reservation>(
+    model = ExpressReservationDB.model<IReservation>(
       'Reservation',
       ReservationSchema,
     ),

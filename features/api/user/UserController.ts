@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'npm:express'
-import { UserRules } from '../UserRules.ts'
-import { User } from '../../../../models/User/User.ts'
+import { UserRules } from './UserRules.ts'
+import { User } from '../../../models/User/User.ts'
 import { QueryOptions } from 'mongoose'
-import { IUser } from '../../../../models/User/IUser.ts'
-import { UserService } from '../UserService.ts'
+import { IUser } from '../../../models/User/IUser.ts'
+import { UserService } from './UserService.ts'
 
 export class UserController {
   private userService: UserService

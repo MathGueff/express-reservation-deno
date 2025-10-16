@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { ReservationController } from './controllers/ReservationController.ts'
+import { ReservationController } from './ReservationController.ts'
 import { PaginationMiddle } from '../../../middlewares/PaginationMiddle.ts'
 import { AuthMiddle } from '../../../middlewares/AuthMiddle.ts'
 

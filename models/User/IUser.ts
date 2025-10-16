@@ -6,3 +6,12 @@ export interface IUser extends IBaseInterface {
   password: string
   balance: number
 }
+
+
+export type IRequestUser = Pick<
+  IUser,
+  | '_id'
+  | 'name'
+  | 'balance'
+  | 'email'
+>
