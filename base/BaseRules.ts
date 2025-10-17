@@ -35,7 +35,7 @@ export class BaseRules {
       if (arrayOfInvalid?.length) {
         const joinedFieldNames = arrayOfInvalid.map((e: IInvalidField) => e.field).join(', ')
         throw throwlhos.err_badRequest(
-          'globals.invalid.fields',
+          'Campos inválidos',
           arrayOfInvalid,
         )
       }

@@ -29,6 +29,7 @@ export class UserController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -49,6 +50,7 @@ export class UserController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -72,6 +74,7 @@ export class UserController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -100,6 +103,7 @@ export class UserController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -114,6 +118,7 @@ export class UserController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 }

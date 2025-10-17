@@ -9,7 +9,7 @@ export const ObjectId = (objectId: string | mongoose.Types.ObjectId) => {
     return new mongoose.Types.ObjectId(objectId)
   }
 
-  throw throwlhos.err_unprocessableEntity('Invalid ObjectId', { objectId })
+  throw throwlhos.err_unprocessableEntity('ObjectId inválido', { objectId })
 }
 
 export const StartTransaction = async (
