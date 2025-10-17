@@ -19,7 +19,7 @@ const reservations: Array<Partial<IReservation>> = [
   {
     _id: ObjectId('68f003456320cc0715fc6a32'),
     name: 'Hotel Galo Roxo',
-    buyer: ObjectId('68efa563a019f17c2c22f5ad'),
+    owner: ObjectId('68efa563a019f17c2c22f5ad'),
     price: 2,
     daysOfDuration: 1,
   },
@@ -117,6 +117,12 @@ export class MockReservationRepository {
   updateOne() {
     return Promise.resolve(this.getMockData())
   }
+
+  updateById(id : string) {
+    return Promise.resolve(this.findOne({id}))
+  }
+
+  
 
   save() {
     return Promise.resolve(this.getMockData())

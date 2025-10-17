@@ -123,6 +123,34 @@ Deno.test(
   },
 )
 
+Deno.test('ReservationController: deve atualizar uma reserva', { sanitizeOps: false, sanitizeResources: false }, async () => {
+  const mockRequest: Request = {
+    params: {
+      reservationId: '68f003456320cc0715fc6a32',
+    },
+    body: {
+      price : 232
+    }
+  } as unknown as Request
+
+  const result = await reservationController.update(mockRequest, MockResponser, MockNextFunction) as any
+  assertEquals(result.message, 'Reserva atualizada')
+})
+
+Deno.test('ReservationController: deve exibir erro ao tentar editar uma reserva em uso', { sanitizeOps: false, sanitizeResources: false }, async () => {
+  const mockRequest: Request = {
+    params: {
+      reservationId: '68efa67b69af3880b978bf57',
+    },
+    body: {
+      price : 232
+    }
+  } as unknown as Request
+
+  const result = await reservationController.update(mockRequest, MockResponser, MockNextFunction) as any
+  assertEquals(result.message, 'Não é possível alterar a reserva enquanto estiver em uso')
+})
+
 //DELETE remove
 Deno.test('ReservationController: deve remover uma reserva', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest: Request = {
