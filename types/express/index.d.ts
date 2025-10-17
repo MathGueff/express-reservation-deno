@@ -4,10 +4,10 @@ import { IUser } from '../../models/User/IUser.ts'
 declare global {
   namespace Express {
     interface Request {
-      user : Partial<IUser>
-      pagination : IPaginationMiddle.output
-      userId : string
-      reservationId : string
+      user: Partial<IUser>
+      pagination: IPaginationMiddle.output
+      userId: string
+      reservationId: string
     }
   }
 }

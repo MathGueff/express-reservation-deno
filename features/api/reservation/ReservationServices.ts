@@ -8,15 +8,14 @@ import { UserRepository } from '../../../models/User/UserRepository.ts'
 export class ReservationService {
   private reservationRepository: ReservationRepository
 
-  constructor({reservationRepository = new ReservationRepository()} = {}) 
-  {
+  constructor({ reservationRepository = new ReservationRepository() } = {}) {
     this.reservationRepository = reservationRepository
   }
 
   async findAll(options: QueryOptions) {
     const reservations = await this.reservationRepository.findMany({})
-      // .skip(options?.skip ?? 0)
-      // .limit(options?.limit ?? 10)
+    // .skip(options?.skip ?? 0)
+    // .limit(options?.limit ?? 10)
 
     if (reservations.length === 0) {
       throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservations })
@@ -57,9 +56,9 @@ export class ReservationService {
   async reserve(id: string, buyer: string) {
     const reservation = await this.reservationRepository.findById(id)
     const user = await new UserRepository().findById(buyer)
-    
-    if(!user){
-      throw throwlhos.err_notFound('Comprador não identificado', {user})
+
+    if (!user) {
+      throw throwlhos.err_notFound('Comprador não identificado', { user })
     }
 
     if (!reservation) {
@@ -82,8 +81,8 @@ export class ReservationService {
     }
 
     if (!reservation) {
-        throw throwlhos.err_notFound('Não foi possível realizar a reserva', { reservation: reservation })
-      }
+      throw throwlhos.err_notFound('Não foi possível realizar a reserva', { reservation: reservation })
+    }
 
     reservation.startedDate = new Date()
     reservation.endDate = new Date(new Date().setDate(new Date().getDate() + reservation.daysOfDuration))

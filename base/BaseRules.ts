@@ -40,7 +40,7 @@ export class BaseRules {
         )
       }
     } catch (err: any) {
-      console.warn(err)
+      // console.warn(err)
       throw {
         code: 422,
         message: err.message ?? err,

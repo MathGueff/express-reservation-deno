@@ -9,9 +9,9 @@ class ReserveService {
 
   constructor({
     reservationRepository = new ReservationRepository(),
-    userRepository = new UserRepository()
+    userRepository = new UserRepository(),
   } = {}) {
-    this.reservationRepository = reservationRepository;
+    this.reservationRepository = reservationRepository
     this.userRepository = userRepository
   }
 

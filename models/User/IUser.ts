@@ -7,6 +7,11 @@ export interface IUser extends IBaseInterface {
   balance: number
 }
 
+export interface IUserFilter {
+  id: string
+  email: string
+  password: string
+}
 
 export type IRequestUser = Pick<
   IUser,

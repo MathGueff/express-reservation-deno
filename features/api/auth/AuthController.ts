@@ -19,13 +19,14 @@ export class AuthController {
   me = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const id = req.userId
-      const user = await this.authService.me(id); 
+      const user = await this.authService.me(id)
 
       return res.send_ok('Informações da sua conta recuperadas com sucesso', {
         user,
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -42,6 +43,7 @@ export class AuthController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -57,6 +59,7 @@ export class AuthController {
       return res.send_ok('Senha alterada', { user: updated })
     } catch (error) {
       next(error)
+      return error
     }
   }
 }

@@ -8,15 +8,15 @@ export class UserService {
   private userRepository: UserRepository
 
   constructor({
-    userRepository = new UserRepository()
+    userRepository = new UserRepository(),
   } = {}) {
     this.userRepository = userRepository
   }
 
   async findAll(options: QueryOptions) {
     const found = await this.userRepository.findMany({})
-      // .skip(options?.skip ?? 0)
-      // .limit(options?.limit ?? 10)
+    // .skip(options?.skip ?? 0)
+    // .limit(options?.limit ?? 10)
 
     if (found.length === 0) {
       throw throwlhos.err_notFound(

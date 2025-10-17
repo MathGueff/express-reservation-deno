@@ -126,7 +126,7 @@ export class ReservationController {
       const buyer = req.userId
 
       this.rules.validate(
-        { buyer }
+        { buyer },
       )
 
       const reservation = await this.reservationService.reserve(id, buyer)
@@ -154,7 +154,7 @@ export class ReservationController {
       return res.send_ok('Reserva encerrada', {
         reservation: unlinked,
       })
-    } catch (error) { 
+    } catch (error) {
       next(error)
       return error
     }
