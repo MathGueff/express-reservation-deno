@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { ReservationRules } from './ReservationRules.ts'
-import { throwlhos } from '../../../globals/Throwlhos.ts'
 import { QueryOptions } from 'mongoose'
 import { Reservation } from '../../../models/Reservation/Reservation.ts'
 import { ObjectId } from '../../../globals/Mongo.ts'
@@ -134,14 +133,6 @@ export class ReservationController {
         reservation.price,
       )
 
-      if (!reserved) {
-        throw throwlhos.err_notFound('Não foi possível realizar a reserva', { reservation: reserved })
-      }
-
-      reserved.startedDate = new Date()
-      reserved.endDate = new Date(new Date().setDate(new Date().getDate() + reserved.daysOfDuration))
-
-      reserved.save()
       return res.send_ok('Reservado com sucesso', { reservation: reserved })
     } catch (error) {
       next(error)
@@ -150,14 +141,14 @@ export class ReservationController {
 
   unlink = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const id = req.params.id
+      const id = req.params.reservationId
 
       const unlinked = await this.reservationService.unlink(id)
 
       return res.send_ok('Reserva encerrada', {
         reservation: unlinked,
       })
-    } catch (error) {
+    } catch (error) { 
       next(error)
     }
   }
@@ -168,7 +159,7 @@ export class ReservationController {
 
       const deleted = await this.reservationService.remove(id)
 
-      return res.send_ok('Você excluiu sua reserva com sucesso', {
+      return res.send_ok('Reserva removida', {
         reservation: deleted,
       })
     } catch (error) {

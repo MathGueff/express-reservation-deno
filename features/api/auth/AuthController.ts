@@ -8,20 +8,19 @@ export class AuthController {
 
   private rules: AuthRules
 
-  constructor(
-    authService: AuthService = new AuthService(),
+  constructor({
+    authService = new AuthService(),
     rules = new AuthRules(),
-  ) {
+  } = {}) {
     this.authService = authService
     this.rules = rules
   }
 
-  me = (req: Request, res: Response, next: NextFunction) => {
+  me = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const user = req.userId
-      if (!user) {
-        throw throwlhos.err_unauthorized('É necessário um token válido', { user })
-      }
+      const id = req.userId
+      const user = await this.authService.me(id); 
+
       return res.send_ok('Informações da sua conta recuperadas com sucesso', {
         user,
       })
@@ -55,7 +54,7 @@ export class AuthController {
 
       const updated = await this.authService.changePassword(id, password)
 
-      res.send_ok('Senha alterada', { user: updated })
+      return res.send_ok('Senha alterada', { user: updated })
     } catch (error) {
       next(error)
     }

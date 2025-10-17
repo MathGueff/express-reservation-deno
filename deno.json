@@ -3,7 +3,7 @@
   "nodeModulesDir": "auto",
   "tasks": {
     "dev": "deno run --watch -A --env server.ts",
-    "test": "deno test -A --no-check --env",
+    "test": "deno test -A --no-check --trace-leaks --env",
     "scripts": "deno run -A scripts.ts"
   },
   "imports": {

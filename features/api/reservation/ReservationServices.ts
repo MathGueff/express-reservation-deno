@@ -56,7 +56,7 @@ export class ReservationService {
 
   async reserve(id: string, buyer: string) {
     const reservation = await this.reservationRepository.findById(id)
-    const user = await new UserRepository().findById(id)
+    const user = await new UserRepository().findById(buyer)
     
     if(!user){
       throw throwlhos.err_notFound('Comprador não identificado', {user})
@@ -80,6 +80,15 @@ export class ReservationService {
     if (reservation.price > user.balance) {
       throw throwlhos.err_unprocessableEntity('Saldo insuficiente para a compra da reserva')
     }
+
+    if (!reservation) {
+        throw throwlhos.err_notFound('Não foi possível realizar a reserva', { reservation: reservation })
+      }
+
+    reservation.startedDate = new Date()
+    reservation.endDate = new Date(new Date().setDate(new Date().getDate() + reservation.daysOfDuration))
+
+    reservation.save()
 
     return reservation
   }
@@ -135,7 +144,6 @@ export class ReservationService {
 
   async remove(id: string) {
     const deleted = await this.reservationRepository.deleteById(id)
-    console.log(deleted)
 
     if (!deleted) {
       throw throwlhos.err_notFound('Reserva não encontrada', { reservation: deleted })

@@ -7,8 +7,18 @@ import { AuthRepository } from '../../../models/Auth/AuthRepository.ts'
 export class AuthService {
   private authRepository: AuthRepository
 
-  constructor(authRepository = new AuthRepository()) {
+  constructor({authRepository = new AuthRepository()} = {}) {
     this.authRepository = authRepository
+  }
+
+  async me(id : string){
+    const user = await this.authRepository.findById(id)
+
+    if(!user){
+      throw throwlhos.err_notFound('Nenhum usuário encontrado', {user})
+    }
+
+    return user
   }
 
   async login(email: string, password: string) {

@@ -10,10 +10,10 @@ export class UserController {
 
   private rules: UserRules
 
-  constructor(
-    userService: UserService = new UserService(),
+  constructor({
+    userService = new UserService(),
     rules = new UserRules(),
-  ) {
+  } = {}) {
     this.userService = userService
     this.rules = rules
   }
