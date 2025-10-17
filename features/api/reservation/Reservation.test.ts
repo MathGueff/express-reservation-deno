@@ -1,3 +1,4 @@
+import mongooseAggregatePaginate from 'npm:mongoose-aggregate-paginate-v2'
 import { MockNextFunction, MockResponser } from '../../../globals/Stubs.ts'
 import { ReservationRepository } from '../../../models/Reservation/ReservationRepository.ts'
 import { MockReservationRepository, MockReservationService, MockReserveService } from './__mocks__/MockReservationRepository.ts'
@@ -19,7 +20,7 @@ const reservationController = new ReservationController({
 })
 
 //GET List
-Deno.test('ReservationController: deve mostrar todos documentos de reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('ReservationController: GET deve mostrar todos documentos de reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {} as unknown as Request
   const result = await reservationController.findAll(mockRequest, MockResponser, MockNextFunction) as any
   assertEquals(result.message, 'Reservas encontradas')
@@ -51,6 +52,15 @@ Deno.test(
 Deno.test('ReservationController: deve retornar as reservas do usuário passado', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest: Request = {
     userId: '68efa563a019f17c2c22f5ad',
+  } as unknown as Request
+  const result = await reservationController.findMyReservations(mockRequest, MockResponser, MockNextFunction) as any
+  assertEquals(result.message, 'Suas reservas foram encontradas')
+})
+
+//GET my reservations
+Deno.test('ReservationController: deve retornar erro ao procurar com um ID inválido', { sanitizeOps: false, sanitizeResources: false }, async () => {
+  const mockRequest: Request = {
+    userId: '68f28d78cb21901c2575ad23',
   } as unknown as Request
   const result = await reservationController.findMyReservations(mockRequest, MockResponser, MockNextFunction) as any
   assertEquals(result.message, 'Suas reservas foram encontradas')
@@ -95,7 +105,6 @@ Deno.test('ReservationController: deve liberar a reserva que não está mais ocu
     },
   } as unknown as Request
   const result = await reservationController.unlink(mockRequest, MockResponser, MockNextFunction) as any
-  console.log(result)
   assertEquals(result.message, 'Reserva encerrada')
 })
 
@@ -110,7 +119,6 @@ Deno.test(
       },
     } as unknown as Request
     const result = await reservationController.unlink(mockRequest, MockResponser, MockNextFunction) as any
-    console.log(result)
     assertEquals(result.message, 'Não é possível encerrar uma reserva com finalização pendente')
   },
 )
@@ -128,7 +136,7 @@ Deno.test('ReservationController: deve remover uma reserva', { sanitizeOps: fals
 })
 
 //DELETE remove
-Deno.test('ReservationController: deve remover uma reserva', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('ReservationController: deve exibir erro ao tentar remover uma reserva', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest: Request = {
     params: {
       reservationId: '68f25cda82fb9962383815c5',

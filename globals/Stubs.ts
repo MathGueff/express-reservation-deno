@@ -399,7 +399,7 @@ export const MockDatabase = {
 // @ts-ignore mock axios adapter
 export const MockAdapter = new MockAxiosAdapter(axios)
 
-export const MockNextFunction = (value: any) => print.error(value)
+export const MockNextFunction = (value: any) => print.error(value.message)
 
 // const translations = JSON.parse(
 //   Deno.readTextFileSync("./locales/pt-BR/translation.json"),

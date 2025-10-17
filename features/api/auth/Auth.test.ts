@@ -14,7 +14,7 @@ const authController = new AuthController({
 })
 
 //GET Auth
-Deno.test('AuthService: deve retornar o usuário atualmente autenticado', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('AuthController: deve retornar o usuário atualmente autenticado', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {
     userId: '68efa598a019f17c2c22f5b1',
   } as unknown as Request
@@ -22,7 +22,7 @@ Deno.test('AuthService: deve retornar o usuário atualmente autenticado', { sani
   assertEquals(result.message, 'Informações da sua conta recuperadas com sucesso')
 })
 
-Deno.test('AuthService: deve retornar erro de usuário não autenticado', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('AuthController: deve retornar erro de usuário não autenticado', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {
     userId: 'dfsdf',
   } as unknown as Request
@@ -31,7 +31,7 @@ Deno.test('AuthService: deve retornar erro de usuário não autenticado', { sani
 })
 
 //POST Login
-Deno.test('AuthService: deve retornar o token do usuário com o login', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('AuthController: deve retornar o token do usuário com o login', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {
     body: {
       email: 'davy@gmail.com',
@@ -44,7 +44,7 @@ Deno.test('AuthService: deve retornar o token do usuário com o login', { saniti
 
 
 //POST Login
-Deno.test('AuthService: deve retornar erro de email ou senha incorretos', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('AuthController: deve retornar erro de email ou senha incorretos', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {
     body: {
       email: 'davy@ttt.com',
@@ -56,7 +56,7 @@ Deno.test('AuthService: deve retornar erro de email ou senha incorretos', { sani
 })
 
 //PATCH Change password
-Deno.test('AuthService: deve alterar a senha do usuário', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('AuthController: deve alterar a senha do usuário', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {
     body: {
       password: 'novaSenha',
@@ -68,7 +68,7 @@ Deno.test('AuthService: deve alterar a senha do usuário', { sanitizeOps: false,
 })
 
 //PATCH Change password
-Deno.test('AuthService: deve alterar a senha do usuário', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('AuthController: deve exibir erro ao tentar alterar a senha do usuário', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {
     body: {
       password: 2231,

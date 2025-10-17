@@ -14,8 +14,6 @@ export class AuthService {
   async me(id: string) {
     const user = await this.authRepository.findById(id)
 
-    console.log(user)
-
     if (!user) {
       throw throwlhos.err_notFound('Nenhum usuário encontrado', { user })
     }

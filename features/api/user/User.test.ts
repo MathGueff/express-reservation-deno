@@ -39,7 +39,7 @@ Deno.test('UserController: deve exibir erro de usuário não encontrado', { sani
 })
 
 //POST create
-Deno.test('userController: deve criar um novo documento de user', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('UserController: deve criar um novo documento de user', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest: Request = {
     body: {
       name: 'Nova usuário',
@@ -54,7 +54,7 @@ Deno.test('userController: deve criar um novo documento de user', { sanitizeOps:
 
 //POST create
 Deno.test(
-  'userController: deve mostrar erro ao tentar criar um novo documento de user',
+  'UserController: deve mostrar erro ao tentar criar um novo documento de user',
   { sanitizeOps: false, sanitizeResources: false },
   async () => {
     const mockRequest: Request = {
@@ -88,7 +88,7 @@ Deno.test('UserController: deve atualizar um usuário', { sanitizeOps: false, sa
 })
 
 //PUT Update
-Deno.test('UserController: deve atualizar um usuário', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('UserController: deve retornar um erro ao tentar atualizar um usuário', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest: Request = {
     body: {
       name: 1,
@@ -117,7 +117,7 @@ Deno.test('UserCOntroller: deve remover um usuário', { sanitizeOps: false, sani
 })
 
 //DELETE remove
-Deno.test('UserCOntroller: deve exibir erro ao remover um usuário', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('UserController: deve exibir erro ao remover um usuário', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest: Request = {
     params: {
       userId: '1234',
