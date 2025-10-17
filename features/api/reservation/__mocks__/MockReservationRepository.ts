@@ -18,21 +18,21 @@ const reservations: Array<Partial<IReservation>> = [
   },
   {
     _id: ObjectId('68f003456320cc0715fc6a32'),
-    name: "Hotel Galo Roxo",
+    name: 'Hotel Galo Roxo',
     buyer: ObjectId('68efa563a019f17c2c22f5ad'),
     price: 2,
     daysOfDuration: 1,
   },
   {
-    _id: ObjectId("68f0ec35c1996dc1534cff3a"),
-    name: "Hotel Ruim Vista",
-    owner: "68efa563a019f17c2c22f5ad",
-    buyer: "68efa598a019f17c2c22f5b1",
+    _id: ObjectId('68f0ec35c1996dc1534cff3a'),
+    name: 'Hotel Ruim Vista',
+    owner: '68efa563a019f17c2c22f5ad',
+    buyer: '68efa598a019f17c2c22f5b1',
     price: 1000,
     daysOfDuration: 1,
-    startedDate: ISODate("2025-10-16T19:17:56.701Z"),
-    endDate: ISODate("2050-10-16T19:17:56.701Z"),
-  }
+    startedDate: ISODate('2025-10-16T19:17:56.701Z'),
+    endDate: ISODate('2050-10-16T19:17:56.701Z'),
+  },
 ]
 
 export class MockReservationRepository {
@@ -61,10 +61,10 @@ export class MockReservationRepository {
 
   // Mock implementations of repository methods
   async findToReport(id: string) {
-     let results = this.mockData;
-     if(id) {
-      results = this.mockData.filter(item => item._id?.equals(id))
-     }
+    let results = this.mockData
+    if (id) {
+      results = this.mockData.filter((item) => item._id?.equals(id))
+    }
 
     return results
   }
@@ -98,21 +98,20 @@ export class MockReservationRepository {
     return Promise.resolve(this.getMockData())
   }
 
-   findById(id : string) {
-    return Promise.resolve(this.findOne({id}))
+  findById(id: string) {
+    return Promise.resolve(this.findOne({ id }))
   }
-
 
   create() {
     return Promise.resolve(this.getMockData())
   }
 
-  findOneAndUpdate(id : string) {
-    return Promise.resolve(this.findOne({id}))
+  findOneAndUpdate(id: string) {
+    return Promise.resolve(this.findOne({ id }))
   }
 
-  deleteById(id : string) {
-    return Promise.resolve(this.findOne({id}))
+  deleteById(id: string) {
+    return Promise.resolve(this.findOne({ id }))
   }
 
   updateOne() {
