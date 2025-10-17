@@ -14,7 +14,7 @@ const authController =  new AuthController({
 })
 
 //GET Auth
-Deno.test('AuthService: deve retornar o usuário atualmente autenticado', async () => {
+Deno.test('AuthService: deve retornar o usuário atualmente autenticado',{ sanitizeOps : false, sanitizeResources : false} , async () => {
     const mockRequest = {
         userId : '68efa598a019f17c2c22f5b1'
     } as unknown as Request
@@ -23,7 +23,7 @@ Deno.test('AuthService: deve retornar o usuário atualmente autenticado', async 
 })
 
 //POST Login
-Deno.test('AuthService: deve retornar o token do usuário com o login', async () => {
+Deno.test('AuthService: deve retornar o token do usuário com o login',{ sanitizeOps : false, sanitizeResources : false} , async () => {
     const mockRequest = {
         body : {
             email : 'davy@test.com',
@@ -36,7 +36,7 @@ Deno.test('AuthService: deve retornar o token do usuário com o login', async ()
 
 
 //PATCH Change password
-Deno.test('AuthService: deve alterar a senha do usuário', async () => {
+Deno.test('AuthService: deve alterar a senha do usuário',{ sanitizeOps : false, sanitizeResources : false} , async () => {
     const mockRequest = {
         body : {
             password : 'novaSenha'

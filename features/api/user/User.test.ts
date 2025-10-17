@@ -14,14 +14,14 @@ const userController = new UserController({
 })
 
 //GET List
-Deno.test('UserController: deve mostrar todos documentos de Users', async () => {
+Deno.test('UserController: deve mostrar todos documentos de Users',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
     const mockRequest = {} as unknown as Request
     const result = await userController.findAll(mockRequest, MockResponser, MockNextFunction) as any
     assertEquals(result.message, 'Usuários encontrados')
 })
 
 //GET by ID
-Deno.test('UserController: deve mostrar um documento de Users', async () => {
+Deno.test('UserController: deve mostrar um documento de Users',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
      const mockRequest : Request = {
         params : {userId : '68efa598a019f17c2c22f5b1'}
     } as unknown as Request
@@ -30,7 +30,7 @@ Deno.test('UserController: deve mostrar um documento de Users', async () => {
 })
 
 //GET by ID
-Deno.test('UserController: deve exibir erro de usuário não encontrado', async () => {
+Deno.test('UserController: deve exibir erro de usuário não encontrado',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
      const mockRequest : Request = {
         params : {userId : '68f2493a8fb51f65d37e04ac'}
     } as unknown as Request
@@ -39,7 +39,7 @@ Deno.test('UserController: deve exibir erro de usuário não encontrado', async 
 })
 
 //POST create
-Deno.test('userController: deve criar um novo documento de user', async () => {
+Deno.test('userController: deve criar um novo documento de user',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
     const mockRequest : Request = {
         body : {
             name : 'Nova usuário',
@@ -53,7 +53,7 @@ Deno.test('userController: deve criar um novo documento de user', async () => {
 })
 
 //POST create
-Deno.test('userController: deve mostrar erro ao tentar criar um novo documento de user', async () => {
+Deno.test('userController: deve mostrar erro ao tentar criar um novo documento de user',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
     const mockRequest : Request = {
         body : {
             name : 1,
@@ -67,7 +67,7 @@ Deno.test('userController: deve mostrar erro ao tentar criar um novo documento d
 })
 
 //PUT Update
-Deno.test('UserController: deve atualizar um usuário', async () => {
+Deno.test('UserController: deve atualizar um usuário',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
     const mockRequest : Request = {
         body : {
             name : 'Novo usuário',
@@ -84,7 +84,7 @@ Deno.test('UserController: deve atualizar um usuário', async () => {
 })
 
 //PUT Update
-Deno.test('UserController: deve atualizar um usuário', async () => {
+Deno.test('UserController: deve atualizar um usuário',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
     const mockRequest : Request = {
         body : {
             name : 1,
@@ -101,7 +101,7 @@ Deno.test('UserController: deve atualizar um usuário', async () => {
 })
 
 //DELETE remove
-Deno.test('UserCOntroller: deve remover um usuário', async () => {
+Deno.test('UserCOntroller: deve remover um usuário',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
     const mockRequest : Request = {
         params : {
             userId : '68efa67b69af3880b978bf57'
@@ -113,7 +113,7 @@ Deno.test('UserCOntroller: deve remover um usuário', async () => {
 })
 
 //DELETE remove
-Deno.test('UserCOntroller: deve exibir erro ao remover um usuário', async () => {
+Deno.test('UserCOntroller: deve exibir erro ao remover um usuário',{ sanitizeOps : false, sanitizeResources : false} ,  async () => {
     const mockRequest : Request = {
         params : {
             userId : '1234'
