@@ -1,6 +1,7 @@
 import { Types } from 'mongoose'
+import { IBaseInterface } from '../../base/IBaseInterface.ts'
 
-export interface IReservation {
+export interface IReservation extends IBaseInterface {
   name: string
   owner: Types.ObjectId
   buyer?: Types.ObjectId
