@@ -38,6 +38,7 @@ export class ReservationController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -52,6 +53,7 @@ export class ReservationController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -66,6 +68,7 @@ export class ReservationController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -89,6 +92,7 @@ export class ReservationController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -112,6 +116,7 @@ export class ReservationController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -136,6 +141,7 @@ export class ReservationController {
       return res.send_ok('Reservado com sucesso', { reservation: reserved })
     } catch (error) {
       next(error)
+      return error
     }
   }
 
@@ -150,6 +156,7 @@ export class ReservationController {
       })
     } catch (error) { 
       next(error)
+      return error
     }
   }
 
@@ -164,6 +171,7 @@ export class ReservationController {
       })
     } catch (error) {
       next(error)
+      return error
     }
   }
 }

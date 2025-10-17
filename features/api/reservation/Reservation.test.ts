@@ -66,6 +66,7 @@ Deno.test('ReservationController: deve liberar a reserva que não está mais ocu
         }
     } as unknown as Request
     const result = await reservationController.unlink(mockRequest, MockResponser, MockNextFunction) as any
+    console.log(result)
     assertEquals(result.message, 'Reserva encerrada')
 })
 
