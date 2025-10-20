@@ -2,6 +2,7 @@ import { IReservation } from './IReservation.ts'
 import { BaseSchema } from '../../base/BaseSchema.ts'
 import { ObjectId } from '../../globals/Mongo.ts'
 import { string } from '@zarco/isness'
+import { Types } from 'mongoose'
 
 export class Reservation implements IReservation {
   name: IReservation['name']
@@ -12,6 +13,7 @@ export class Reservation implements IReservation {
   startedDate?: IReservation['startedDate']
   endDate?: IReservation['endDate']
 
+
   constructor(reservation: IReservation) {
     this.name = reservation.name
     this.buyer = reservation.buyer, this.price = reservation.price, this.owner = reservation.owner
@@ -19,6 +21,13 @@ export class Reservation implements IReservation {
     this.startedDate = reservation.startedDate
     this.endDate = reservation.endDate
   }
+}
+
+export interface IReservationFilter{
+  _id ?: Types.ObjectId,
+  userId ?: Types.ObjectId,
+  skip ?: number,
+  limit ?: number
 }
 
 export class ReservationSchemaClass extends BaseSchema {

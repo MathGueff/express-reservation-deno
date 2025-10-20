@@ -14,7 +14,6 @@ class UserRepository extends BaseRepository<IUser> {
   }
 
   findManyWithFilter(filter : IUserFilter) : Promise<Array<IUser>>{
-    console.log(filter)
     const models = this.model
     .find()
     .limit(filter.limit ?? 10)

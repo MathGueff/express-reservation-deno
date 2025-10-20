@@ -1,9 +1,9 @@
-import { QueryOptions } from 'mongoose'
 import { ReservationRepository } from '../../models/Reservation/ReservationRepository.ts'
 import { throwlhos } from '../../globals/Throwlhos.ts'
 import { IReservation } from '../../models/Reservation/IReservation.ts'
 import { ObjectId } from '../../globals/Mongo.ts'
 import { UserRepository } from '../../models/User/UserRepository.ts'
+import { IReservationFilter } from '../../models/Reservation/Reservation.ts'
 
 export class ReservationService {
   private reservationRepository: ReservationRepository
@@ -12,10 +12,8 @@ export class ReservationService {
     this.reservationRepository = reservationRepository
   }
 
-  async findAll(options: QueryOptions) {
-    const reservations = await this.reservationRepository.findMany({})
-    // .skip(options?.skip ?? 0)
-    // .limit(options?.limit ?? 10)
+  async findAll(filters : IReservationFilter) {
+    const reservations = await this.reservationRepository.findManyWithFilter(filters)
 
     if (reservations.length === 0) {
       throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservations })
@@ -35,12 +33,7 @@ export class ReservationService {
   }
 
   async findMyReservations(id: string) {
-    const reservations = await this.reservationRepository.findMany({
-      $or: [
-        { buyer: ObjectId(id) },
-        { owner: ObjectId(id) },
-      ],
-    })
+    const reservations = await this.reservationRepository.findReservationByActiveUser(id)
 
     if (reservations.length === 0) {
       throw throwlhos.err_notFound('Nenhuma reserva encontrada', { reservations })
@@ -133,7 +126,9 @@ export class ReservationService {
     }
 
     if (reservation.buyer) {
-      throw throwlhos.err_unprocessableEntity('Não é possível alterar a reserva enquanto estiver em uso')
+      throw throwlhos.err_unprocessableEntity('Não é possível alterar a reserva enquanto estiver em uso', {
+        buyer : reservation.buyer
+      })
     }
 
     await this.reservationRepository.updateById(id, update)

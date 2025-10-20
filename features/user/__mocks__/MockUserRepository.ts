@@ -97,25 +97,4 @@ class MockUserRepository {
   }
 }
 
-export const expectedFindAll = {
-  success: true,
-  message: "Usuários encontrados",
-  data: {
-    users: [
-      {
-        name: "Matheus Gueff",
-        email: "gueff@gmail.com",
-        balance: 3353,
-      },
-      {
-        name: "Davy Ribeiro",
-        email: "davy@gmail.com",
-        balance: 496798,
-      },
-    ],
-  },
-  code: 200,
-  status: "OK",
-};
-
 export { MockUserRepository };
