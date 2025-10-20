@@ -13,7 +13,6 @@ export class Reservation implements IReservation {
   startedDate?: IReservation['startedDate']
   endDate?: IReservation['endDate']
 
-
   constructor(reservation: IReservation) {
     this.name = reservation.name
     this.buyer = reservation.buyer, this.price = reservation.price, this.owner = reservation.owner
@@ -23,11 +22,11 @@ export class Reservation implements IReservation {
   }
 }
 
-export interface IReservationFilter{
-  _id ?: Types.ObjectId,
-  userId ?: Types.ObjectId,
-  skip ?: number,
-  limit ?: number
+export interface IReservationFilter {
+  _id?: Types.ObjectId
+  userId?: Types.ObjectId
+  skip?: number
+  limit?: number
 }
 
 export class ReservationSchemaClass extends BaseSchema {

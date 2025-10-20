@@ -1,3 +1,3 @@
-import { ReservationService } from '../ReservationServices.ts'
+import { ReservationService } from '../services/ReservationServices.ts'
 
-export class MockReservationService extends ReservationService{}
+export class MockReservationService extends ReservationService {}

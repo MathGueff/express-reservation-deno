@@ -25,11 +25,11 @@ const users: Array<Partial<IUser>> = [
 ]
 
 export class MockAuthRepository {
-  findById(id : string) {
+  findById(id: string) {
     const user = users.filter((u) => u._id?.toString() == id).at(0)
     return Promise.resolve(user)
   }
-  findOne(filters : IUserFilter) {
+  findOne(filters: IUserFilter) {
     const user = users.filter((u) => u.email == filters.email).at(0)
     return Promise.resolve(user)
   }

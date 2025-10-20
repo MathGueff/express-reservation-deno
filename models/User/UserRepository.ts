@@ -13,13 +13,13 @@ class UserRepository extends BaseRepository<IUser> {
     super(model)
   }
 
-  findManyWithFilter(filter : IUserFilter) : Promise<Array<IUser>>{
+  findManyWithFilter(filter: IUserFilter): Promise<Array<IUser>> {
     const models = this.model
-    .find()
-    .limit(filter.limit ?? 10)
-    .skip(filter.skip ?? 0)
+      .find()
+      .limit(filter.limit ?? 10)
+      .skip(filter.skip ?? 0)
 
-    return models;
+    return models
   }
 }
 

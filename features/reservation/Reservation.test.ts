@@ -1,6 +1,6 @@
 import { MockNextFunction, MockResponser } from '../../globals/Stubs.ts'
 import { ReservationRepository } from '../../models/Reservation/ReservationRepository.ts'
-import { MockReservationRepository, MockReserveService } from './__mocks__/MockReservationRepository.ts'
+import { MockReservationRepository } from './__mocks__/MockReservationRepository.ts'
 import { ReservationController } from './ReservationController.ts'
 import { assertEquals } from 'https://deno.land/std@0.201.0/assert/mod.ts'
 import { Request } from 'npm:express'
@@ -11,41 +11,40 @@ const reservationService = new MockReservationService({
   reservationRepository: new MockReservationRepository() as unknown as ReservationRepository,
 })
 
-const reserveService = new MockReserveService({
-  reservationRepository: new MockReservationRepository() as unknown as ReservationRepository,
-})
-
 const reservationController = new ReservationController({
   reservationService,
-  reserveService,
 })
 
-//GET List
+// GET List
 Deno.test('ReservationController: deve mostrar todos documentos de reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {} as unknown as Request
   const received = await reservationController.findAll(mockRequest, MockResponser, MockNextFunction) as any
-   defaultAssert(received, 'success-payload', {
-      message : "Reservas encontradas",
-      code : 200, 
-      status : "OK"
-    })
+  defaultAssert(received, 'success-payload', {
+    message: 'Reservas encontradas',
+    code: 200,
+    status: 'OK',
+  })
 })
 
 //GET List
-Deno.test('ReservationController: deve exibir erro ao procurar todos documentos de reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
-  const mockRequest = {
-    pagination : {
-      limit : 10,
-      page: 500  
-    }
-  } as unknown as Request
-  const received = await reservationController.findAll(mockRequest, MockResponser, MockNextFunction) as any
-   defaultAssert(received, 'error-payload', {
-      message : "Nenhuma reserva encontrada",
-      code : 404, 
-      status : "NOT_FOUND"
+Deno.test(
+  'ReservationController: deve exibir erro ao procurar todos documentos de reservation',
+  { sanitizeOps: false, sanitizeResources: false },
+  async () => {
+    const mockRequest = {
+      pagination: {
+        limit: 10,
+        page: 500,
+      },
+    } as unknown as Request
+    const received = await reservationController.findAll(mockRequest, MockResponser, MockNextFunction) as any
+    defaultAssert(received, 'error-payload', {
+      message: 'Nenhuma reserva encontrada',
+      code: 404,
+      status: 'NOT_FOUND',
     })
-})
+  },
+)
 
 //GET By Id
 Deno.test('ReservationController: deve mostrar um documento de reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
@@ -54,9 +53,9 @@ Deno.test('ReservationController: deve mostrar um documento de reservation', { s
   } as unknown as Request
   const received = await reservationController.findById(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
-    message : "Reserva encontrada",
-    code : 200, 
-    status : "OK"
+    message: 'Reserva encontrada',
+    code: 200,
+    status: 'OK',
   })
 })
 
@@ -70,9 +69,9 @@ Deno.test(
     } as unknown as Request
     const received = await reservationController.findById(mockRequest, MockResponser, MockNextFunction) as any
     defaultAssert(received, 'error-payload', {
-      message : "Nenhuma reserva encontrada",
-      code : 404, 
-      status : "NOT_FOUND"
+      message: 'Nenhuma reserva encontrada',
+      code: 404,
+      status: 'NOT_FOUND',
     })
   },
 )
@@ -85,9 +84,9 @@ Deno.test('ReservationController: deve retornar as reservas do usuário passado'
   const received = await reservationController.findMyReservations(mockRequest, MockResponser, MockNextFunction) as any
   assertEquals(received.message, 'Suas reservas foram encontradas')
   defaultAssert(received, 'success-payload', {
-    message : "Suas reservas foram encontradas",
-    code : 200, 
-    status : "OK"
+    message: 'Suas reservas foram encontradas',
+    code: 200,
+    status: 'OK',
   })
 })
 
@@ -98,9 +97,9 @@ Deno.test('ReservationController: deve retornar erro ao procurar com um ID invá
   } as unknown as Request
   const received = await reservationController.findMyReservations(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'error-payload', {
-    message : "Nenhuma reserva encontrada",
-    code : 404, 
-    status : "NOT_FOUND"
+    message: 'Nenhuma reserva encontrada',
+    code: 404,
+    status: 'NOT_FOUND',
   })
 })
 
@@ -116,9 +115,9 @@ Deno.test('ReservationController: deve criar um novo documento de reservation', 
   } as unknown as Request
   const received = await reservationController.create(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
-    message : "Reserva criada",
-    code : 201, 
-    status : "CREATED"
+    message: 'Reserva criada',
+    code: 201,
+    status: 'CREATED',
   })
 })
 
@@ -136,10 +135,10 @@ Deno.test('ReservationController: deve retornar erro ao tentar criar um novo doc
     userId: '68efa563a019f17c2c22f5ad',
   } as unknown as Request
   const received = await reservationController.create(mockRequest, MockResponser, MockNextFunction) as any
-   defaultAssert(received, 'error-payload', {
-    message : "Campos inválidos",
-    code : 422, 
-    status : "BAD_REQUEST"
+  defaultAssert(received, 'error-payload', {
+    message: 'Campos inválidos',
+    code: 422,
+    status: 'BAD_REQUEST',
   })
 })
 
@@ -152,9 +151,9 @@ Deno.test('ReservationController: deve liberar a reserva que não está mais ocu
   } as unknown as Request
   const received = await reservationController.unlink(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
-    message : "Reserva encerrada",
-    code : 200, 
-    status : "OK"
+    message: 'Reserva encerrada',
+    code: 200,
+    status: 'OK',
   })
 })
 
@@ -170,10 +169,10 @@ Deno.test(
     } as unknown as Request
     const received = await reservationController.unlink(mockRequest, MockResponser, MockNextFunction) as any
     defaultAssert(received, 'error-payload', {
-    message : "Não é possível encerrar uma reserva com finalização pendente",
-    code : 422, 
-    status : "UNPROCESSABLE_ENTITY"
-  })
+      message: 'Não é possível encerrar uma reserva com finalização pendente',
+      code: 422,
+      status: 'UNPROCESSABLE_ENTITY',
+    })
   },
 )
 
@@ -183,35 +182,39 @@ Deno.test('ReservationController: deve atualizar uma reserva', { sanitizeOps: fa
       reservationId: '68f003456320cc0715fc6a32',
     },
     body: {
-      price : 232
-    }
+      price: 232,
+    },
   } as unknown as Request
 
   const received = await reservationController.update(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
-    message : "Reserva atualizada",
-    code : 200, 
-    status : "OK"
+    message: 'Reserva atualizada',
+    code: 200,
+    status: 'OK',
   })
 })
 
-Deno.test('ReservationController: deve exibir erro ao tentar editar uma reserva em uso', { sanitizeOps: false, sanitizeResources: false }, async () => {
-  const mockRequest: Request = {
-    params: {
-      reservationId: '68efa67b69af3880b978bf57',
-    },
-    body: {
-      price : 232
-    }
-  } as unknown as Request
+Deno.test(
+  'ReservationController: deve exibir erro ao tentar editar uma reserva em uso',
+  { sanitizeOps: false, sanitizeResources: false },
+  async () => {
+    const mockRequest: Request = {
+      params: {
+        reservationId: '68efa67b69af3880b978bf57',
+      },
+      body: {
+        price: 232,
+      },
+    } as unknown as Request
 
-  const received = await reservationController.update(mockRequest, MockResponser, MockNextFunction) as any
-  defaultAssert(received, 'error-payload', {
-    message : "Não é possível alterar a reserva enquanto estiver em uso",
-    code : 422, 
-    status : "UNPROCESSABLE_ENTITY"
-  })
-})
+    const received = await reservationController.update(mockRequest, MockResponser, MockNextFunction) as any
+    defaultAssert(received, 'error-payload', {
+      message: 'Não é possível alterar a reserva enquanto estiver em uso',
+      code: 422,
+      status: 'UNPROCESSABLE_ENTITY',
+    })
+  },
+)
 
 //DELETE remove
 Deno.test('ReservationController: deve remover uma reserva', { sanitizeOps: false, sanitizeResources: false }, async () => {
@@ -223,9 +226,9 @@ Deno.test('ReservationController: deve remover uma reserva', { sanitizeOps: fals
 
   const received = await reservationController.remove(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
-    message : "Reserva removida",
-    code : 200, 
-    status : "OK"
+    message: 'Reserva removida',
+    code: 200,
+    status: 'OK',
   })
 })
 
@@ -239,21 +242,41 @@ Deno.test('ReservationController: deve exibir erro ao tentar remover uma reserva
 
   const received = await reservationController.remove(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'error-payload', {
-    message : "Reserva não encontrada",
-    code : 404, 
-    status : "NOT_FOUND"
+    message: 'Reserva não encontrada',
+    code: 404,
+    status: 'NOT_FOUND',
   })
 })
 
-//TODO : Preciso injetar o ReserveService tbm
-// Deno.test('ReservationController: deve fazer a reserva de uma reservation',{ sanitizeOps : false, sanitizeResources : false} ,  async () =>{
-//     const mockRequest : Request = {
-//         params : {
-//             reservationId : '68f0ec35c1996dc1534cff3a'
-//         },
-//         userId : '68efa598a019f17c2c22f5b1'
-//     } as unknown as Request
-//     const received = await reservationController.reserve(mockRequest, MockResponser, MockNextFunction) as any
-//     console.log(result)
-//     assertEquals(result.message, 'Reservado com sucesso')
-// })
+Deno.test('ReservationController: deve fazer a reserva de uma reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
+  const mockRequest: Request = {
+    params: {
+      reservationId: '68f003456320cc0715fc6a32',
+    },
+    userId: '68efa598a019f17c2c22f5b1',
+  } as unknown as Request
+  const received = await reservationController.reserve(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'success-payload', {
+    message: 'Reservado com sucesso',
+    code: 200,
+    status: 'OK',
+  })
+})
+
+Deno.test('ReservationController: deve exibir erro ao fazer a reserva de uma reservation já ocupada', {
+  sanitizeOps: false,
+  sanitizeResources: false,
+}, async () => {
+  const mockRequest: Request = {
+    params: {
+      reservationId: '68efa67b69af3880b978bf57',
+    },
+    userId: '68efa598a019f17c2c22f5b1',
+  } as unknown as Request
+  const received = await reservationController.reserve(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'error-payload', {
+    message: 'A reserva já está em uso',
+    code: 422,
+    status: 'UNPROCESSABLE_ENTITY',
+  })
+})

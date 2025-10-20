@@ -1,7 +1,7 @@
-import { ReserveService } from "../../../services/ReserveService.ts";
-import { IReservation } from "../../../models/Reservation/IReservation.ts";
-import { ObjectId } from "../../../globals/Mongo.ts";
-import { ISODate } from "../../../utilities/static/Time.ts";
+import { ReserveService } from '../services/TransactionReservationService.ts'
+import { IReservation } from '../../../models/Reservation/IReservation.ts'
+import { ObjectId } from '../../../globals/Mongo.ts'
+import { ISODate } from '../../../utilities/static/Time.ts'
 import { IReservationFilter, Reservation } from '../../../models/Reservation/Reservation.ts'
 const reservations: Array<IReservation> = [
   {
@@ -34,85 +34,95 @@ const reservations: Array<IReservation> = [
 ]
 
 export class MockReservationRepository {
-  private mockData: Array<Partial<IReservation>> = [];
-    private mockRestrictionClasses: Array<Reservation> = [];
-  
-    constructor() {
-      this.setMockData(reservations);
+  private mockData: Array<Partial<IReservation>> = []
+  private mockRestrictionClasses: Array<Reservation> = []
+
+  constructor() {
+    this.setMockData(reservations)
+  }
+
+  // Set mock data for tests
+  setMockData(data: Partial<IReservation> | Array<Partial<IReservation>>) {
+    if (Array.isArray(data)) {
+      this.mockData = data
+      this.mockRestrictionClasses = data.map((item) => new Reservation(item as IReservation))
+    } else {
+      this.mockData = [data]
+      this.mockRestrictionClasses = [new Reservation(data as IReservation)]
     }
-  
-    // Set mock data for tests
-    setMockData(data: Partial<IReservation> | Array<Partial<IReservation>>) {
-      if (Array.isArray(data)) {
-        this.mockData = data;
-        this.mockRestrictionClasses = data.map((item) => new Reservation(item as IReservation));
-      } else {
-        this.mockData = [data];
-        this.mockRestrictionClasses = [new Reservation(data as IReservation)];
-      }
-    }
-  
-    // Clear mock data
-    clearMockData() {
-      this.mockData = [];
-      this.mockRestrictionClasses = [];
-    }
-  
-    // Helper methods for testing
-    getMockData(): Array<Partial<IReservation>> {
-      return this.mockData;
-    }
-  
-    getMockRestrictionClasses(): Array<Reservation> {
-      return this.mockRestrictionClasses;
-    }
-  
-    async findOne(query: any): Promise<IReservation | null> {
-      if (query.id) {
-        query._id = query.id;
-        delete query.id;
-      }
-  
-      const found = this.mockData.find((item) => {
-        return Object.keys(query).every((key) => {
-          if (key === "_id") return item._id?.equals(query._id);
-          return item[key as keyof IReservation] === query[key];
-        });
-      });
-      
-      return found ? new Reservation(found as IReservation) : null;
-    }
-  
-    async findManyWithFilter(filter ?: IReservationFilter) {
-      // Apply skip and limit
-      const skip = filter?.skip || 0;
-      const limit = filter?.limit || 10;
-      return Promise.resolve(
-        this.mockData.slice(skip, skip + limit) as Array<IReservation>
-      );
-    }
-  
-    create() {}
-  
-    findById(id: string) {
-      return Promise.resolve(this.findOne({id}));
-    }
-    
-    findOneAndUpdate(id: string) {
-      return Promise.resolve(this.findOne({id}));
+  }
+
+  // Clear mock data
+  clearMockData() {
+    this.mockData = []
+    this.mockRestrictionClasses = []
+  }
+
+  // Helper methods for testing
+  getMockData(): Array<Partial<IReservation>> {
+    return this.mockData
+  }
+
+  getMockRestrictionClasses(): Array<Reservation> {
+    return this.mockRestrictionClasses
+  }
+
+  async findOne(query: any): Promise<IReservation | null> {
+    if (query.id) {
+      query._id = query.id
+      delete query.id
     }
 
-    updateById(id: string) {
-      return Promise.resolve(this.findOne({id}));
-    }
-    
-    deleteById(id: string) {
-      return Promise.resolve(this.findOne({id}));
-    }
+    const found = this.mockData.find((item) => {
+      return Object.keys(query).every((key) => {
+        if (key === '_id') return item._id?.equals(query._id)
+        return item[key as keyof IReservation] === query[key]
+      })
+    })
 
-    findReservationByActiveUser(id : string){
-      return Promise.resolve(this.mockData.filter(data => data.buyer?.equals(id) || data.owner?.equals(id)))
-    }
+    return found ? new Reservation(found as IReservation) : null
+  }
+
+  async findManyWithFilter(filter?: IReservationFilter) {
+    // Apply skip and limit
+    const skip = filter?.skip || 0
+    const limit = filter?.limit || 10
+    return Promise.resolve(
+      this.mockData.slice(skip, skip + limit) as Array<IReservation>,
+    )
+  }
+
+  create() {}
+
+  findById(id: string) {
+    return Promise.resolve(this.findOne({ id }))
+  }
+
+  findOneAndUpdate(id: string) {
+    return Promise.resolve(this.findOne({ id }))
+  }
+
+  updateById(id: string) {
+    return Promise.resolve(this.findOne({ id }))
+  }
+
+  updateOne(id: string) {
+    return Promise.resolve(this.findOne({ id }))
+  }
+
+  setReservationTime(id: string) {
+    return Promise.resolve(this.findOne({ id }))
+  }
+
+  deleteById(id: string) {
+    return Promise.resolve(this.findOne({ id }))
+  }
+
+  findReservationByActiveUser(id: string) {
+    return Promise.resolve(this.mockData.filter((data) => data.buyer?.equals(id) || data.owner?.equals(id)))
+  }
+
+  updateReservationWithSession(id: string) {
+    return Promise.resolve(this.findOne({ id }))
+  }
 }
-
-export class MockReserveService extends ReserveService {}

@@ -17,10 +17,10 @@ export class User implements IUser {
   }
 }
 
-export interface IUserFilter{
-  _id ?: Types.ObjectId
-  skip ?: number,
-  limit ?: number
+export interface IUserFilter {
+  _id?: Types.ObjectId
+  skip?: number
+  limit?: number
 }
 
 class UserSchemaClass extends BaseSchema {

@@ -1,9 +1,9 @@
-import { ReservationRepository } from '../../models/Reservation/ReservationRepository.ts'
-import { throwlhos } from '../../globals/Throwlhos.ts'
-import { IReservation } from '../../models/Reservation/IReservation.ts'
-import { ObjectId } from '../../globals/Mongo.ts'
-import { UserRepository } from '../../models/User/UserRepository.ts'
-import { IReservationFilter } from '../../models/Reservation/Reservation.ts'
+import { ReservationRepository } from '../../../models/Reservation/ReservationRepository.ts'
+import { throwlhos } from '../../../globals/Throwlhos.ts'
+import { IReservation } from '../../../models/Reservation/IReservation.ts'
+import { ObjectId } from '../../../globals/Mongo.ts'
+import { UserRepository } from '../../../models/User/UserRepository.ts'
+import { IReservationFilter } from '../../../models/Reservation/Reservation.ts'
 
 export class ReservationService {
   private reservationRepository: ReservationRepository
@@ -12,7 +12,7 @@ export class ReservationService {
     this.reservationRepository = reservationRepository
   }
 
-  async findAll(filters : IReservationFilter) {
+  async findAll(filters: IReservationFilter) {
     const reservations = await this.reservationRepository.findManyWithFilter(filters)
 
     if (reservations.length === 0) {
@@ -77,11 +77,6 @@ export class ReservationService {
       throw throwlhos.err_notFound('Não foi possível realizar a reserva', { reservation: reservation })
     }
 
-    reservation.startedDate = new Date()
-    reservation.endDate = new Date(new Date().setDate(new Date().getDate() + reservation.daysOfDuration))
-
-    reservation.save()
-
     return reservation
   }
 
@@ -127,7 +122,7 @@ export class ReservationService {
 
     if (reservation.buyer) {
       throw throwlhos.err_unprocessableEntity('Não é possível alterar a reserva enquanto estiver em uso', {
-        buyer : reservation.buyer
+        buyer: reservation.buyer,
       })
     }
 

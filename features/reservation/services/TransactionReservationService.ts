@@ -1,9 +1,9 @@
-import { ReservationRepository } from '../models/Reservation/ReservationRepository.ts'
-import { UserRepository } from '../models/User/UserRepository.ts'
-import { ObjectId, StartTransaction } from '../globals/Mongo.ts'
-import { ExpressReservationDB } from '../database/db/ExpressReservationDB.ts'
+import { ReservationRepository } from '../../../models/Reservation/ReservationRepository.ts'
+import { UserRepository } from '../../../models/User/UserRepository.ts'
+import { ObjectId, StartTransaction } from '../../../globals/Mongo.ts'
+import { ExpressReservationDB } from '../../../database/db/ExpressReservationDB.ts'
 
-class ReserveService {
+class TransactionReservationService {
   private reservationRepository: ReservationRepository
   private userRepository: UserRepository
 
@@ -15,10 +15,10 @@ class ReserveService {
     this.userRepository = userRepository
   }
 
-  async reserve(id: string, buyerId: string, ownerId: string, price: number) {
+  async reserve(id: string, buyerId: string, ownerId: string, price: number, daysOfDuration: number) {
     const session = await StartTransaction(ExpressReservationDB)
     try {
-      await this.reservationRepository.updateOne(ObjectId(id), { buyer: ObjectId(buyerId) }).session(session)
+      await this.reservationRepository.updateReservationWithSession(id, buyerId, daysOfDuration, session)
       await this.userRepository.updateOne(ObjectId(buyerId), { $inc: { balance: -price } }).session(session)
       await this.userRepository.updateOne(ObjectId(ownerId), { $inc: { balance: price } }).session(session)
 
@@ -35,4 +35,4 @@ class ReserveService {
   }
 }
 
-export { ReserveService }
+export { TransactionReservationService }

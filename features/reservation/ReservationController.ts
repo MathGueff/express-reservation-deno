@@ -3,21 +3,21 @@ import { ReservationRules } from './ReservationRules.ts'
 import { QueryOptions } from 'mongoose'
 import { Reservation } from '../../models/Reservation/Reservation.ts'
 import { ObjectId } from '../../globals/Mongo.ts'
-import { ReserveService } from '../../services/ReserveService.ts'
-import { ReservationService } from './ReservationServices.ts'
+import { TransactionReservationService } from './services/TransactionReservationService.ts'
+import { ReservationService } from './services/ReservationServices.ts'
 
 export class ReservationController {
   private reservationService: ReservationService
-  private reserveService: ReserveService
+  private transactionReservationService: TransactionReservationService
   private rules: ReservationRules
 
   constructor({
     reservationService = new ReservationService(),
-    reserveService = new ReserveService(),
+    transactionReservationService = new TransactionReservationService(),
     rules = new ReservationRules(),
   } = {}) {
     this.reservationService = reservationService
-    this.reserveService = reserveService
+    this.transactionReservationService = transactionReservationService
     this.rules = rules
   }
 
@@ -131,11 +131,12 @@ export class ReservationController {
 
       const reservation = await this.reservationService.reserve(id, buyer)
 
-      const reserved = await this.reserveService.reserve(
+      const reserved = await this.transactionReservationService.reserve(
         id,
         buyer,
         reservation.owner.toString(),
         reservation.price,
+        reservation.daysOfDuration,
       )
 
       return res.send_ok('Reservado com sucesso', { reservation: reserved })

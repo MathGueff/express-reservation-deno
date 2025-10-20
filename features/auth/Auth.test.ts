@@ -21,9 +21,9 @@ Deno.test('AuthController: deve retornar o usuário atualmente autenticado', { s
   } as unknown as Request
   const received = await authController.me(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
-    message : "Informações da sua conta recuperadas com sucesso",
-    code : 200, 
-    status : "OK"
+    message: 'Informações da sua conta recuperadas com sucesso',
+    code: 200,
+    status: 'OK',
   })
 })
 
@@ -33,9 +33,9 @@ Deno.test('AuthController: deve retornar erro de usuário não autenticado', { s
   } as unknown as Request
   const received = await authController.me(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'error-payload', {
-    message : "Nenhum usuário encontrado",
-    code : 404, 
-    status : "NOT_FOUND"
+    message: 'Nenhum usuário encontrado',
+    code: 404,
+    status: 'NOT_FOUND',
   })
 })
 
@@ -49,12 +49,11 @@ Deno.test('AuthController: deve retornar o token do usuário com o login', { san
   } as unknown as Request
   const received = await authController.login(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
-    message : "Login realizado com sucesso",
-    code : 200, 
-    status : "OK"
+    message: 'Login realizado com sucesso',
+    code: 200,
+    status: 'OK',
   })
 })
-
 
 //POST Login
 Deno.test('AuthController: deve retornar erro de email ou senha incorretos', { sanitizeOps: false, sanitizeResources: false }, async () => {
@@ -66,9 +65,9 @@ Deno.test('AuthController: deve retornar erro de email ou senha incorretos', { s
   } as unknown as Request
   const received = await authController.login(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'error-payload', {
-    message : "Email ou senha estão incorretos",
-    code : 401, 
-    status : "UNAUTHORIZED"
+    message: 'Email ou senha estão incorretos',
+    code: 401,
+    status: 'UNAUTHORIZED',
   })
 })
 
@@ -82,9 +81,9 @@ Deno.test('AuthController: deve alterar a senha do usuário', { sanitizeOps: fal
   } as unknown as Request
   const received = await authController.changePassword(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
-    message : "Senha alterada",
-    code : 200, 
-    status : "OK"
+    message: 'Senha alterada',
+    code: 200,
+    status: 'OK',
   })
 })
 
@@ -98,9 +97,8 @@ Deno.test('AuthController: deve exibir erro ao tentar alterar a senha do usuári
   } as unknown as Request
   const received = await authController.changePassword(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'error-payload', {
-    message : "Campos inválidos",
-    code : 422, 
-    status : "BAD_REQUEST"
+    message: 'Campos inválidos',
+    code: 422,
+    status: 'BAD_REQUEST',
   })
 })
-

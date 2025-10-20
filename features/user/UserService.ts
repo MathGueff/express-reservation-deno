@@ -4,7 +4,6 @@ import { UserRepository } from '../../models/User/UserRepository.ts'
 import { IUserFilter } from '../../models/User/User.ts'
 import { ObjectId } from '../../globals/Mongo.ts'
 
-
 export class UserService {
   private userRepository: UserRepository
 
@@ -15,7 +14,7 @@ export class UserService {
   }
 
   async findAll(filter: IUserFilter) {
-    const found = await this.userRepository.findManyWithFilter(filter);
+    const found = await this.userRepository.findManyWithFilter(filter)
 
     if (found.length === 0) {
       throw throwlhos.err_notFound(
