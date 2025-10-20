@@ -4,6 +4,7 @@ import { Request } from 'npm:express'
 import { MockAuthRepository, MockAuthService } from './__mocks__/MockAuthRepository.ts'
 import { AuthController } from './AuthController.ts'
 import { AuthRepository } from '../../models/Auth/AuthRepository.ts'
+import { defaultAssert } from '../../globals/TestAssert.ts'
 
 const authService = new MockAuthService({
   authRepository: new MockAuthRepository() as unknown as AuthRepository,
@@ -18,16 +19,24 @@ Deno.test('AuthController: deve retornar o usuário atualmente autenticado', { s
   const mockRequest = {
     userId: '68efa598a019f17c2c22f5b1',
   } as unknown as Request
-  const result = await authController.me(mockRequest, MockResponser, MockNextFunction) as any
-  assertEquals(result.message, 'Informações da sua conta recuperadas com sucesso')
+  const received = await authController.me(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'success-payload', {
+    message : "Informações da sua conta recuperadas com sucesso",
+    code : 200, 
+    status : "OK"
+  })
 })
 
 Deno.test('AuthController: deve retornar erro de usuário não autenticado', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {
     userId: 'dfsdf',
   } as unknown as Request
-  const result = await authController.me(mockRequest, MockResponser, MockNextFunction) as any
-  assertEquals(result.message, 'Nenhum usuário encontrado')
+  const received = await authController.me(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'error-payload', {
+    message : "Nenhum usuário encontrado",
+    code : 404, 
+    status : "NOT_FOUND"
+  })
 })
 
 //POST Login
@@ -38,8 +47,12 @@ Deno.test('AuthController: deve retornar o token do usuário com o login', { san
       password: 'test12',
     },
   } as unknown as Request
-  const result = await authController.login(mockRequest, MockResponser, MockNextFunction) as any
-  assertEquals(result.message, 'Login realizado com sucesso')
+  const received = await authController.login(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'success-payload', {
+    message : "Login realizado com sucesso",
+    code : 200, 
+    status : "OK"
+  })
 })
 
 
@@ -51,8 +64,12 @@ Deno.test('AuthController: deve retornar erro de email ou senha incorretos', { s
       password: '123345',
     },
   } as unknown as Request
-  const result = await authController.login(mockRequest, MockResponser, MockNextFunction) as any
-  assertEquals(result.message, 'Email ou senha estão incorretos')
+  const received = await authController.login(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'error-payload', {
+    message : "Email ou senha estão incorretos",
+    code : 401, 
+    status : "UNAUTHORIZED"
+  })
 })
 
 //PATCH Change password
@@ -63,8 +80,12 @@ Deno.test('AuthController: deve alterar a senha do usuário', { sanitizeOps: fal
     },
     userId: '68efa598a019f17c2c22f5b1',
   } as unknown as Request
-  const result = await authController.changePassword(mockRequest, MockResponser, MockNextFunction) as any
-  assertEquals(result.message, 'Senha alterada')
+  const received = await authController.changePassword(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'success-payload', {
+    message : "Senha alterada",
+    code : 200, 
+    status : "OK"
+  })
 })
 
 //PATCH Change password
@@ -75,7 +96,11 @@ Deno.test('AuthController: deve exibir erro ao tentar alterar a senha do usuári
     },
     userId: '68efa598a019f17c2c22f5b1',
   } as unknown as Request
-  const result = await authController.changePassword(mockRequest, MockResponser, MockNextFunction) as any
-  assertEquals(result.message, 'Campos inválidos')
+  const received = await authController.changePassword(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'error-payload', {
+    message : "Campos inválidos",
+    code : 422, 
+    status : "BAD_REQUEST"
+  })
 })
 
