@@ -21,13 +21,29 @@ const reservationController = new ReservationController({
 })
 
 //GET List
-Deno.test('ReservationController: GET deve mostrar todos documentos de reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('ReservationController: deve mostrar todos documentos de reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {} as unknown as Request
   const received = await reservationController.findAll(mockRequest, MockResponser, MockNextFunction) as any
    defaultAssert(received, 'success-payload', {
       message : "Reservas encontradas",
       code : 200, 
       status : "OK"
+    })
+})
+
+//GET List
+Deno.test('ReservationController: deve exibir erro ao procurar todos documentos de reservation', { sanitizeOps: false, sanitizeResources: false }, async () => {
+  const mockRequest = {
+    pagination : {
+      limit : 10,
+      page: 500  
+    }
+  } as unknown as Request
+  const received = await reservationController.findAll(mockRequest, MockResponser, MockNextFunction) as any
+   defaultAssert(received, 'error-payload', {
+      message : "Nenhuma reserva encontrada",
+      code : 404, 
+      status : "NOT_FOUND"
     })
 })
 

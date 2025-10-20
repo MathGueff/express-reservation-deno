@@ -15,13 +15,29 @@ const userController = new UserController({
 })
 
 //GET List
-Deno.test('UserController: deve mostrar todos documentos de Users em formato de Array', { sanitizeOps: false, sanitizeResources: false }, async () => {
+Deno.test('UserController: deve mostrar todos documentos de Users', { sanitizeOps: false, sanitizeResources: false }, async () => {
   const mockRequest = {} as unknown as Request
   const received = await userController.findAll(mockRequest, MockResponser, MockNextFunction) as any
   defaultAssert(received, 'success-payload', {
     message : "Usuários encontrados",
     code : 200, 
     status : "OK"
+  })
+})
+
+//GET List
+Deno.test('UserController: deve exibir erro ao procurar por todos documentos de Users', { sanitizeOps: false, sanitizeResources: false }, async () => {
+  const mockRequest = {
+    pagination : {
+      limit : 10,
+      page: 500  
+    }
+  } as unknown as Request
+  const received = await userController.findAll(mockRequest, MockResponser, MockNextFunction) as any
+  defaultAssert(received, 'error-payload', {
+    message : "Nenhum usuário encontrado",
+    code : 404, 
+    status : "NOT_FOUND"
   })
 })
 
