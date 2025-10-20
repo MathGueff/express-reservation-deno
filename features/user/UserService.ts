@@ -1,8 +1,9 @@
-import { QueryOptions } from 'mongoose'
-import { IUser } from '../../../models/User/IUser.ts'
-import { UserRepository } from '../../../models/User/UserRepository.ts'
-import { ObjectId } from '../../../globals/Mongo.ts'
-import { throwlhos } from '../../../globals/Throwlhos.ts'
+import { throwlhos } from '../../globals/Throwlhos.ts'
+import { IUser } from '../../models/User/IUser.ts'
+import { UserRepository } from '../../models/User/UserRepository.ts'
+import { IUserFilter } from '../../models/User/User.ts'
+import { ObjectId } from '../../globals/Mongo.ts'
+
 
 export class UserService {
   private userRepository: UserRepository
@@ -13,10 +14,8 @@ export class UserService {
     this.userRepository = userRepository
   }
 
-  async findAll(options: QueryOptions) {
-    const found = await this.userRepository.findMany({})
-    // .skip(options?.skip ?? 0)
-    // .limit(options?.limit ?? 10)
+  async findAll(filter: IUserFilter) {
+    const found = await this.userRepository.findManyWithFilter(filter);
 
     if (found.length === 0) {
       throw throwlhos.err_notFound(

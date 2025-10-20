@@ -23,7 +23,7 @@ export class Env {
   }
 
   static get authAccessTokenExpiration() {
-    return 36000000 // 10 hours
+    return 60480000 // 2 anos (para teste)
   }
 
   static get mongodbMaxPoolSize(): number | null {

@@ -1,8 +1,8 @@
-import { Env } from '../../../config/Env.ts'
-import { throwlhos } from '../../../globals/Throwlhos.ts'
+import { Env } from '../../config/Env.ts'
+import { throwlhos } from '../../globals/Throwlhos.ts'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { AuthRepository } from '../../../models/Auth/AuthRepository.ts'
+import { AuthRepository } from '../../models/Auth/AuthRepository.ts'
 
 export class AuthService {
   private authRepository: AuthRepository

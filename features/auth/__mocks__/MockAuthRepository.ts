@@ -1,6 +1,6 @@
-import { ObjectId } from '../../../../globals/Mongo.ts'
-import { IUser, IUserFilter } from '../../../../models/User/IUser.ts'
-import { ISODate } from '../../../../utilities/static/Time.ts'
+import { ObjectId } from '../../../globals/Mongo.ts'
+import { IUser, IUserFilter } from '../../../models/User/IUser.ts'
+import { ISODate } from '../../../utilities/static/Time.ts'
 import { AuthService } from '../AuthService.ts'
 
 const users: Array<Partial<IUser>> = [

@@ -4,6 +4,9 @@
   "tasks": {
     "dev": "deno run --watch -A --env server.ts",
     "test": "deno test -A --no-check --trace-leaks --env",
+    "test:user": "deno test features/user -A --no-check --trace-leaks --env",
+    "test:auth": "deno test features/auth -A --no-check --trace-leaks --env",
+    "test:reservation": "deno test features/reservation -A --no-check --trace-leaks --env",
     "scripts": "deno run -A scripts.ts"
   },
   "imports": {

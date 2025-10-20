@@ -1,19 +1,32 @@
+import { Types } from 'mongoose'
 import { BaseSchema } from '../../base/BaseSchema.ts'
 import { IUser } from '../User/IUser.ts'
 import bcrypt from 'bcrypt'
 
 export class User implements IUser {
+  _id?: IUser['_id']
   name: IUser['name']
   email: IUser['email']
   password: IUser['password']
   balance: IUser['balance']
+  createdAt?: IUser['createdAt']
+  updatedAt?: IUser['updatedAt']
 
   constructor(user: IUser) {
+    this._id = user._id;
     this.name = user.name
     this.email = user.email
     this.password = user.password
     this.balance = user.balance
+    this.createdAt = user.createdAt
+    this.updatedAt = user.updatedAt
   }
+}
+
+export interface IUserFilter{
+  _id ?: Types.ObjectId
+  skip ?: number,
+  limit ?: number
 }
 
 class UserSchemaClass extends BaseSchema {

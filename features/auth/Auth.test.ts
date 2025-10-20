@@ -1,9 +1,9 @@
-import { MockNextFunction, MockResponser } from '../../../globals/Stubs.ts'
+import { MockNextFunction, MockResponser } from '../../globals/Stubs.ts'
 import { assertEquals } from 'https://deno.land/std@0.201.0/assert/mod.ts'
 import { Request } from 'npm:express'
 import { MockAuthRepository, MockAuthService } from './__mocks__/MockAuthRepository.ts'
 import { AuthController } from './AuthController.ts'
-import { AuthRepository } from '../../../models/Auth/AuthRepository.ts'
+import { AuthRepository } from '../../models/Auth/AuthRepository.ts'
 
 const authService = new MockAuthService({
   authRepository: new MockAuthRepository() as unknown as AuthRepository,

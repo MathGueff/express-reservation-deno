@@ -1,5 +1,5 @@
 import is from '@zarco/isness'
-import { BaseRules } from '../../../base/BaseRules.ts'
+import { BaseRules } from '../../base/BaseRules.ts'
 
 export class ReservationRules extends BaseRules {
   constructor() {

@@ -1,6 +1,6 @@
 import mongooseAggregatePaginate from 'npm:mongoose-aggregate-paginate-v2'
-import { MockNextFunction, MockResponser } from '../../../globals/Stubs.ts'
-import { ReservationRepository } from '../../../models/Reservation/ReservationRepository.ts'
+import { MockNextFunction, MockResponser } from '../../globals/Stubs.ts'
+import { ReservationRepository } from '../../models/Reservation/ReservationRepository.ts'
 import { MockReservationRepository, MockReservationService, MockReserveService } from './__mocks__/MockReservationRepository.ts'
 import { ReservationController } from './ReservationController.ts'
 import { assertEquals } from 'https://deno.land/std@0.201.0/assert/mod.ts'

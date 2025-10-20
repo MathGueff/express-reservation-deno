@@ -1,9 +1,9 @@
 import { QueryOptions } from 'mongoose'
-import { ReservationRepository } from '../../../models/Reservation/ReservationRepository.ts'
-import { throwlhos } from '../../../globals/Throwlhos.ts'
-import { IReservation } from '../../../models/Reservation/IReservation.ts'
-import { ObjectId } from '../../../globals/Mongo.ts'
-import { UserRepository } from '../../../models/User/UserRepository.ts'
+import { ReservationRepository } from '../../models/Reservation/ReservationRepository.ts'
+import { throwlhos } from '../../globals/Throwlhos.ts'
+import { IReservation } from '../../models/Reservation/IReservation.ts'
+import { ObjectId } from '../../globals/Mongo.ts'
+import { UserRepository } from '../../models/User/UserRepository.ts'
 
 export class ReservationService {
   private reservationRepository: ReservationRepository

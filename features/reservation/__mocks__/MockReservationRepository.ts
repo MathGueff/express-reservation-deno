@@ -1,9 +1,9 @@
 import { ReservationService } from '../ReservationServices.ts'
-import { ReserveService } from '../../../../services/ReserveService.ts'
-import { IReservation } from '../../../../models/Reservation/IReservation.ts'
-import { Reservation } from '../../../../models/Reservation/Reservation.ts'
-import { ObjectId } from '../../../../globals/Mongo.ts'
-import { ISODate } from '../../../../utilities/static/Time.ts'
+import { ReserveService } from '../../../services/ReserveService.ts'
+import { IReservation } from '../../../models/Reservation/IReservation.ts'
+import { Reservation } from '../../../models/Reservation/Reservation.ts'
+import { ObjectId } from '../../../globals/Mongo.ts'
+import { ISODate } from '../../../utilities/static/Time.ts'
 
 const reservations: Array<Partial<IReservation>> = [
   {

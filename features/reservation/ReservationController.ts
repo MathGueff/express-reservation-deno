@@ -1,9 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { ReservationRules } from './ReservationRules.ts'
 import { QueryOptions } from 'mongoose'
-import { Reservation } from '../../../models/Reservation/Reservation.ts'
-import { ObjectId } from '../../../globals/Mongo.ts'
-import { ReserveService } from '../../../services/ReserveService.ts'
+import { Reservation } from '../../models/Reservation/Reservation.ts'
+import { ObjectId } from '../../globals/Mongo.ts'
+import { ReserveService } from '../../services/ReserveService.ts'
 import { ReservationService } from './ReservationServices.ts'
 
 export class ReservationController {
