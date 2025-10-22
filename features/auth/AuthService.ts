@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken'
 import { AuthRepository } from '../../models/Auth/AuthRepository.ts'
 
 export class AuthService {
-  private authRepository: AuthRepository
+  protected authRepository: AuthRepository
 
   constructor({ authRepository = new AuthRepository() } = {}) {
     this.authRepository = authRepository
@@ -30,6 +30,7 @@ export class AuthService {
       checked = await bcrypt.compare(password, founded?.password)
     }
 
+    
     if (!founded || !checked) {
       throw throwlhos.err_unauthorized('Email ou senha estão incorretos', {
         email,

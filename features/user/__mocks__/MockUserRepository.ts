@@ -1,10 +1,11 @@
+import { UpdateQuery } from 'mongoose'
 import { ObjectId } from '../../../globals/Mongo.ts'
 import { IUser } from '../../../models/User/IUser.ts'
 import { IUserFilter, User } from '../../../models/User/User.ts'
 import { ISODate } from '../../../utilities/static/Time.ts'
 
-const users: Array<IUser> = [
-  {
+class MockUserRepository {
+  public mockData: Array<Partial<IUser>> = [{
     _id: ObjectId('68efa563a019f17c2c22f5ad'),
     name: 'Matheus Gueff',
     email: 'gueff@gmail.com',
@@ -21,15 +22,8 @@ const users: Array<IUser> = [
     balance: 496798,
     createdAt: ISODate('2025-10-15T13:46:00.178Z'),
     updatedAt: ISODate('2025-10-17T20:23:09.382Z'),
-  },
-]
-class MockUserRepository {
-  private mockData: Array<Partial<IUser>> = []
+  },]
   private mockRestrictionClasses: Array<User> = []
-
-  constructor() {
-    this.setMockData(users)
-  }
 
   // Set mock data for tests
   setMockData(data: Partial<IUser> | Array<Partial<IUser>>) {
@@ -49,7 +43,7 @@ class MockUserRepository {
   }
 
   // Helper methods for testing
-  getMockData(): Array<Partial<IUser>> {
+  public getMockData(): Array<Partial<IUser>> {
     return this.mockData
   }
 
@@ -82,10 +76,19 @@ class MockUserRepository {
     )
   }
 
-  create() {}
+  create(user : IUser) {
+    const newUser = this.mockData.push(user)
+    return Promise.resolve(this.getMockData()[newUser - 1])
+  }
 
-  updateOne(id: string) {
-    return Promise.resolve(this.findOne(id))
+  updateById(id: string, data : {$set : Partial<User>}) {
+    const userIndex = this.getMockData().findIndex(u => String(u._id) === String(id))
+    if(userIndex === -1) {
+      return null
+    }
+    
+    this.mockData[userIndex] = {...this.mockData[userIndex], ...data.$set}
+    return Promise.resolve(this.findOne({id}))
   }
 
   deleteOne(id: string) {
@@ -93,7 +96,7 @@ class MockUserRepository {
   }
 
   findById(id: string) {
-    return Promise.resolve(this.findOne(id))
+    return Promise.resolve(this.findOne({id}))
   }
 }
 

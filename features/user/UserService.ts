@@ -45,8 +45,7 @@ export class UserService {
   }
 
   async update(id: string, update: Partial<IUser>) {
-    const updated = await this.userRepository.updateOne(
-      { _id: ObjectId(id) },
+    const updated = await this.userRepository.updateById(id,
       { $set: update },
     )
 

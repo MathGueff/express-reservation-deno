@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'npm:express'
 import { UserRules } from './UserRules.ts'
 import { QueryOptions } from 'mongoose'
 import { UserService } from './UserService.ts'
-import { User } from '../../models/User/User.ts'
+import { IUserFilter, User } from '../../models/User/User.ts'
 import { IUser } from '../../models/User/IUser.ts'
 
 export class UserController {
@@ -35,7 +35,7 @@ export class UserController {
 
   findAll = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      let options: QueryOptions = {}
+      let options: IUserFilter = {}
 
       if (req.pagination) {
         if (req.pagination) {

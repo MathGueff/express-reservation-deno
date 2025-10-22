@@ -45,7 +45,7 @@ const reservationController = new ReservationController()
 ReservationRouter.get(
   '/reservations',
   AuthMiddle,
-  PaginationMiddle({ maxLimit: 10 }),
+  PaginationMiddle({ maxLimit: 50 }),
   reservationController.findAll,
 )
 

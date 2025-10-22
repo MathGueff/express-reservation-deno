@@ -19,6 +19,7 @@ export class User implements IUser {
 
 export interface IUserFilter {
   _id?: Types.ObjectId
+  email ?: string,
   skip?: number
   limit?: number
 }

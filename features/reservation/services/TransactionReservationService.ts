@@ -18,7 +18,7 @@ class TransactionReservationService {
   async reserve(id: string, buyerId: string, ownerId: string, price: number, daysOfDuration: number) {
     const session = await StartTransaction(ExpressReservationDB)
     try {
-      await this.reservationRepository.updateReservationWithSession(id, buyerId, daysOfDuration, session)
+      const teste = await this.reservationRepository.updateReservationWithSession(id, buyerId, daysOfDuration, session)
       await this.userRepository.updateOne(ObjectId(buyerId), { $inc: { balance: -price } }).session(session)
       await this.userRepository.updateOne(ObjectId(ownerId), { $inc: { balance: price } }).session(session)
 

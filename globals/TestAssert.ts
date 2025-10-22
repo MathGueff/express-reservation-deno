@@ -1,9 +1,20 @@
 import { assertEquals } from 'https://deno.land/std@0.201.0/assert/assert_equals.ts'
 import { assertExists } from 'https://deno.land/std@0.201.0/assert/assert_exists.ts'
 
-type PayloadType = 'success-payload' | 'error-payload'
+export enum PayloadType {
+  'successPayload' = "successPayload", 
+  'errorPayload' = "errorPayload"
+}
 
-export function defaultAssert(received: any, payload: PayloadType, expected: { message: string; code: number; status: string }) {
+export interface IResponse  {
+  message : string,
+  code : number,
+  status : string
+  data ?: any
+  errors ?: string[]
+}
+
+export function defaultAssert(received: IResponse, payloadType: PayloadType, expected: IResponse) {
   assertEquals(
     received.message,
     expected.message,
@@ -30,20 +41,17 @@ export function defaultAssert(received: any, payload: PayloadType, expected: { m
   `,
   )
 
-  // assertEquals(received.success, expected.success,`
-  //   Success recebido: ${received.success}
-  //   Success esperado: ${expected.success}
-  // `);
-
-  switch (payload) {
-    case 'success-payload':
+  switch (payloadType) {
+    case PayloadType.successPayload:
       assertExists(
         received.data,
         `
         A resposta deve conter o objeto 'data'`,
       )
+      if(expected.data)
+        assertEquals(JSON.stringify(received.data), JSON.stringify(expected.data))
       break
-    case 'error-payload':
+    case PayloadType.errorPayload:
       assertExists(
         received.errors,
         `

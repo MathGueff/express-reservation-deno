@@ -1,10 +1,10 @@
-import { ReserveService } from '../services/TransactionReservationService.ts'
 import { IReservation } from '../../../models/Reservation/IReservation.ts'
 import { ObjectId } from '../../../globals/Mongo.ts'
 import { ISODate } from '../../../utilities/static/Time.ts'
 import { IReservationFilter, Reservation } from '../../../models/Reservation/Reservation.ts'
-const reservations: Array<IReservation> = [
-  {
+
+export class MockReservationRepository {
+  public mockData: Array<Partial<IReservation>> = [{
     _id: ObjectId('68efa67b69af3880b978bf57'),
     name: 'Hotel Ruim Vista',
     owner: ObjectId('68efa563a019f17c2c22f5ad'),
@@ -30,16 +30,9 @@ const reservations: Array<IReservation> = [
     daysOfDuration: 1,
     startedDate: ISODate('2025-10-16T19:17:56.701Z'),
     endDate: ISODate('2050-10-16T19:17:56.701Z'),
-  },
-]
-
-export class MockReservationRepository {
-  private mockData: Array<Partial<IReservation>> = []
+  }]
+  
   private mockRestrictionClasses: Array<Reservation> = []
-
-  constructor() {
-    this.setMockData(reservations)
-  }
 
   // Set mock data for tests
   setMockData(data: Partial<IReservation> | Array<Partial<IReservation>>) {
@@ -59,7 +52,7 @@ export class MockReservationRepository {
   }
 
   // Helper methods for testing
-  getMockData(): Array<Partial<IReservation>> {
+  public getMockData(): Array<Partial<IReservation>> {
     return this.mockData
   }
 
@@ -73,17 +66,17 @@ export class MockReservationRepository {
       delete query.id
     }
 
+    
     const found = this.mockData.find((item) => {
       return Object.keys(query).every((key) => {
         if (key === '_id') return item._id?.equals(query._id)
-        return item[key as keyof IReservation] === query[key]
+          return item[key as keyof IReservation] === query[key]
       })
     })
-
     return found ? new Reservation(found as IReservation) : null
   }
 
-  async findManyWithFilter(filter?: IReservationFilter) {
+  findManyWithFilter(filter?: IReservationFilter) {
     // Apply skip and limit
     const skip = filter?.skip || 0
     const limit = filter?.limit || 10
@@ -92,7 +85,10 @@ export class MockReservationRepository {
     )
   }
 
-  create() {}
+  create(reservation : IReservation) {
+    const newReservation = this.mockData.push(reservation)
+    return Promise.resolve(this.getMockData()[newReservation - 1])
+  }
 
   findById(id: string) {
     return Promise.resolve(this.findOne({ id }))
